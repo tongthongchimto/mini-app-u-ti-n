@@ -1,277 +1,463 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rewards</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rewards Demo</title>
 
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-      background: #101318;
-      color: white;
-      padding: 20px;
-    }
-
-    .app {
-      max-width: 430px;
-      margin: auto;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-    }
-
-    .logo {
-      font-size: 22px;
-      font-weight: bold;
-    }
-
-    .user {
-      background: #1c222b;
-      padding: 8px 12px;
-      border-radius: 20px;
-      font-size: 13px;
-    }
-
-    .balance {
-      background: linear-gradient(135deg, #242b38, #171c24);
-      border-radius: 22px;
-      padding: 28px 20px;
-      text-align: center;
-      margin-bottom: 18px;
-    }
-
-    .balance-title {
-      color: #9da6b5;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    .points {
-      font-size: 42px;
-      font-weight: bold;
-    }
-
-    .coin {
-      font-size: 30px;
-    }
-
-    .reward-btn {
-      width: 100%;
-      border: none;
-      border-radius: 15px;
-      padding: 16px;
-      margin-top: 20px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      background: #2aabee;
-      color: white;
-    }
-
-    .reward-btn:active {
-      transform: scale(.98);
-    }
-
-    .section-title {
-      margin: 25px 0 12px;
-      font-size: 18px;
-    }
-
-    .task {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #1a2029;
-      padding: 15px;
-      border-radius: 15px;
-      margin-bottom: 10px;
-    }
-
-    .task-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .task-icon {
-      font-size: 25px;
-    }
-
-    .task-name {
-      font-size: 14px;
-    }
-
-    .task-reward {
-      color: #58d68d;
-      font-size: 13px;
-    }
-
-    .small-btn {
-      border: none;
-      background: #2aabee;
-      color: white;
-      padding: 8px 12px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    .nav {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 25px;
-    }
-
-    .nav button {
-      border: none;
-      background: #1a2029;
-      color: white;
-      padding: 14px 5px;
-      border-radius: 13px;
-      cursor: pointer;
-    }
-
-    .message {
-      text-align: center;
-      color: #9da6b5;
-      font-size: 13px;
-      margin-top: 15px;
-      min-height: 20px;
-    }
-  </style>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#10131a;
+  color:#fff;
+}
+.app{
+  max-width:480px;
+  margin:auto;
+  min-height:100vh;
+  padding:18px 16px 90px;
+}
+.demo{
+  text-align:center;
+  background:#3a2b00;
+  color:#ffd75a;
+  padding:8px;
+  border-radius:10px;
+  font-size:13px;
+  margin-bottom:15px;
+}
+.card{
+  background:#191e28;
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:14px;
+}
+.balance{
+  text-align:center;
+}
+.points{
+  font-size:34px;
+  font-weight:bold;
+}
+.coin{font-size:25px}
+.reward-btn,.small-btn{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:13px;
+  margin-top:12px;
+  background:#2775ff;
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+}
+.reward-btn:disabled,.small-btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+.small-btn{font-size:14px}
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.row .small-btn{width:auto;margin:0}
+.muted{color:#9da5b4;font-size:13px}
+.timer{
+  text-align:center;
+  margin-top:10px;
+  color:#ffd75a;
+}
+.history{
+  max-height:180px;
+  overflow:auto;
+}
+.history div{
+  padding:9px 0;
+  border-bottom:1px solid #292f3b;
+  font-size:14px;
+}
+input,select{
+  width:100%;
+  padding:12px;
+  border:0;
+  border-radius:10px;
+  margin-top:8px;
+  background:#252b37;
+  color:#fff;
+}
+.nav{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(480px,100%);
+  background:#191e28;
+  display:flex;
+  justify-content:space-around;
+  padding:10px;
+  border-top:1px solid #292f3b;
+}
+.nav button{
+  background:none;
+  border:0;
+  color:#aaa;
+  font-size:12px;
+  cursor:pointer;
+}
+.nav button.active{color:#fff}
+.page{display:none}
+.page.active{display:block}
+</style>
 </head>
 
 <body>
-
 <div class="app">
 
-  <div class="header">
-    <div class="logo">🪙 Rewards</div>
-    <div class="user" id="username">User</div>
-  </div>
+<div class="demo">⚠️ DEMO — điểm và giao dịch chỉ là mô phỏng</div>
 
-  <div class="balance">
-    <div class="balance-title">Số dư của bạn</div>
+<!-- HOME -->
+<section id="home" class="page active">
 
+<div class="card balance">
+  <div class="muted">Số điểm demo</div>
+  <span class="points" id="points">1,250</span>
+  <span class="coin">🪙</span>
+
+  <button class="reward-btn" id="adBtn" onclick="watchAd()">
+    ▶️ Xem quảng cáo +10
+  </button>
+
+  <div id="adStatus" class="timer"></div>
+</div>
+
+<div class="card">
+  <h3>🎁 Điểm danh</h3>
+  <div class="muted">Điểm danh mỗi 4 giờ và xem quảng cáo demo 15 giây.</div>
+
+  <button class="reward-btn" id="checkBtn" onclick="checkIn()">
+    📺 Xem quảng cáo để điểm danh
+  </button>
+
+  <div id="checkTimer" class="timer"></div>
+</div>
+
+<div class="card">
+  <h3>🎯 Nhiệm vụ</h3>
+
+  <div class="row">
     <div>
-      <span class="points" id="points">1,250</span>
-      <span class="coin">🪙</span>
+      <b>Nhiệm vụ cơ bản</b>
+      <div class="muted">Thưởng 100 điểm</div>
     </div>
-
-    <button class="reward-btn" onclick="watchAd()">
-      ▶️ Xem quảng cáo +10
-    </button>
+    <button class="small-btn" onclick="completeTask(100)">Nhận</button>
   </div>
 
-  <div class="section-title">Nhiệm vụ</div>
+  <hr style="border-color:#292f3b;margin:15px 0">
 
-  <div class="task">
-    <div class="task-info">
-      <div class="task-icon">📢</div>
-      <div>
-        <div class="task-name">Theo dõi kênh</div>
-        <div class="task-reward">+100 🪙</div>
-      </div>
+  <div class="row">
+    <div>
+      <b>Mời bạn bè</b>
+      <div class="muted">Thưởng demo 500 điểm</div>
     </div>
-
-    <button class="small-btn" onclick="completeTask(100)">
-      Nhận
-    </button>
+    <button class="small-btn" onclick="completeTask(500)">Mời</button>
   </div>
 
-  <div class="task">
-    <div class="task-info">
-      <div class="task-icon">👥</div>
-      <div>
-        <div class="task-name">Mời bạn bè</div>
-        <div class="task-reward">+500 🪙</div>
-      </div>
+  <hr style="border-color:#292f3b;margin:15px 0">
+
+  <div class="row">
+    <div>
+      <b>Nhiệm vụ nhỏ</b>
+      <div class="muted">Thưởng 50 điểm</div>
     </div>
-
-    <button class="small-btn" onclick="completeTask(500)">
-      Mời
-    </button>
+    <button class="small-btn" onclick="completeTask(50)">Nhận</button>
   </div>
+</div>
 
-  <div class="task">
-    <div class="task-info">
-      <div class="task-icon">🎁</div>
-      <div>
-        <div class="task-name">Điểm danh hôm nay</div>
-        <div class="task-reward">+50 🪙</div>
-      </div>
-    </div>
+</section>
 
-    <button class="small-btn" onclick="completeTask(50)">
-      Nhận
-    </button>
-  </div>
+<!-- WALLET -->
+<section id="wallet" class="page">
 
-  <div class="message" id="message"></div>
+<div class="card">
+  <h2>💰 Ví demo</h2>
 
-  <div class="nav">
-    <button>🏠<br>Trang chủ</button>
-    <button>🎯<br>Nhiệm vụ</button>
-    <button>👤<br>Tài khoản</button>
-  </div>
+  <div class="muted">Số điểm hiện tại</div>
+  <h2><span id="walletPoints">1,250</span> 🪙</h2>
+
+  <label>Loại tài sản</label>
+  <select id="asset">
+    <option>TON</option>
+    <option>USDT</option>
+  </select>
+
+  <label>Địa chỉ ví</label>
+  <input id="address" placeholder="Nhập địa chỉ ví demo">
+
+  <label>Số điểm muốn rút</label>
+  <input id="withdrawAmount" type="number" placeholder="Ví dụ: 1000">
+
+  <button class="reward-btn" onclick="withdraw()">
+    💸 Rút (DEMO)
+  </button>
+
+  <p class="muted">
+    Mức rút tối thiểu demo: 1,000 điểm.
+    Không có giao dịch crypto thật.
+  </p>
+</div>
+
+</section>
+
+<!-- HISTORY -->
+<section id="historyPage" class="page">
+
+<div class="card">
+  <h2>📋 Lịch sử</h2>
+  <div id="history" class="history"></div>
+</div>
+
+</section>
+
+<!-- ACCOUNT -->
+<section id="account" class="page">
+
+<div class="card">
+  <h2>👤 Tài khoản</h2>
+
+  <p>Điểm hiện tại: <b id="accountPoints">1,250</b> 🪙</p>
+
+  <button class="small-btn" onclick="copyReferral()">
+    🔗 Sao chép mã mời demo
+  </button>
+
+  <p id="refStatus" class="muted"></p>
+</div>
+
+</section>
 
 </div>
 
+<nav class="nav">
+  <button class="active" onclick="showPage('home',this)">🏠<br>Trang chủ</button>
+  <button onclick="showPage('wallet',this)">💰<br>Ví</button>
+  <button onclick="showPage('historyPage',this)">📋<br>Lịch sử</button>
+  <button onclick="showPage('account',this)">👤<br>Tài khoản</button>
+</nav>
+
 <script>
-  let points = 1250;
+let points = Number(localStorage.getItem("points")) || 1250;
+let lastCheck = Number(localStorage.getItem("lastCheck")) || 0;
+let history = JSON.parse(localStorage.getItem("history") || "[]");
 
-  if (window.Telegram?.WebApp) {
-    Telegram.WebApp.ready();
-    Telegram.WebApp.expand();
+const CHECK_COOLDOWN = 4 * 60 * 60 * 1000;
+const AD_TIME = 15;
 
-    const user = Telegram.WebApp.initDataUnsafe?.user;
+function save(){
+  localStorage.setItem("points", points);
+  localStorage.setItem("lastCheck", lastCheck);
+  localStorage.setItem("history", JSON.stringify(history));
+}
 
-    if (user) {
-      document.getElementById("username").textContent =
-        user.first_name || "User";
+function update(){
+  document.getElementById("points").textContent = points.toLocaleString();
+  document.getElementById("walletPoints").textContent = points.toLocaleString();
+  document.getElementById("accountPoints").textContent = points.toLocaleString();
+  updateCheck();
+  renderHistory();
+}
+
+function addPoints(amount, reason){
+  points += amount;
+
+  history.unshift({
+    time:new Date().toLocaleString("vi-VN"),
+    text:reason,
+    amount:"+" + amount
+  });
+
+  save();
+  update();
+}
+
+function watchAd(){
+  const btn = document.getElementById("adBtn");
+  const status = document.getElementById("adStatus");
+
+  if(btn.disabled) return;
+
+  btn.disabled = true;
+
+  let remaining = AD_TIME;
+  status.textContent = "📺 Quảng cáo demo còn " + remaining + " giây";
+
+  const timer = setInterval(()=>{
+    remaining--;
+
+    if(remaining > 0){
+      status.textContent = "📺 Quảng cáo demo còn " + remaining + " giây";
+    }else{
+      clearInterval(timer);
+      status.textContent = "✅ Đã xem xong quảng cáo demo";
+      addPoints(10,"Xem quảng cáo demo");
+      btn.disabled = false;
     }
+  },1000);
+}
+
+function checkIn(){
+  const now = Date.now();
+
+  if(now - lastCheck < CHECK_COOLDOWN){
+    updateCheck();
+    return;
   }
 
-  function updatePoints() {
-    document.getElementById("points").textContent =
-      points.toLocaleString("en-US");
+  const btn = document.getElementById("checkBtn");
+  const status = document.getElementById("checkTimer");
+
+  btn.disabled = true;
+
+  let remaining = AD_TIME;
+  status.textContent = "📺 Quảng cáo điểm danh demo: " + remaining + " giây";
+
+  const timer = setInterval(()=>{
+    remaining--;
+
+    if(remaining > 0){
+      status.textContent = "📺 Quảng cáo điểm danh demo: " + remaining + " giây";
+    }else{
+      clearInterval(timer);
+
+      lastCheck = Date.now();
+      addPoints(100,"Điểm danh + xem quảng cáo demo");
+
+      status.textContent = "✅ Điểm danh thành công!";
+      btn.disabled = false;
+
+      updateCheck();
+    }
+  },1000);
+}
+
+function updateCheck(){
+  const btn = document.getElementById("checkBtn");
+  const timer = document.getElementById("checkTimer");
+
+  const diff = Date.now() - lastCheck;
+
+  if(diff >= CHECK_COOLDOWN){
+    btn.disabled = false;
+    timer.textContent = "Có thể điểm danh";
+    return;
   }
 
-  function watchAd() {
-    showMessage("Demo: chỗ này sẽ mở quảng cáo.");
+  btn.disabled = true;
+
+  let remain = CHECK_COOLDOWN - diff;
+
+  const h = Math.floor(remain / 3600000);
+  const m = Math.floor((remain % 3600000) / 60000);
+  const s = Math.floor((remain % 60000) / 1000);
+
+  timer.textContent =
+    "⏳ Điểm danh lại sau " +
+    String(h).padStart(2,"0") + ":" +
+    String(m).padStart(2,"0") + ":" +
+    String(s).padStart(2,"0");
+}
+
+function completeTask(amount){
+  addPoints(amount,"Hoàn thành nhiệm vụ demo");
+  alert("✅ Nhận +" + amount + " điểm demo");
+}
+
+function withdraw(){
+  const asset = document.getElementById("asset").value;
+  const address = document.getElementById("address").value.trim();
+  const amount = Number(document.getElementById("withdrawAmount").value);
+
+  if(!address){
+    alert("⚠️ Hãy nhập địa chỉ ví demo.");
+    return;
   }
 
-  function completeTask(reward) {
-    points += reward;
-    updatePoints();
-
-    showMessage("Đã nhận +" + reward + " 🪙");
+  if(amount < 1000){
+    alert("⚠️ Mức rút tối thiểu là 1,000 điểm demo.");
+    return;
   }
 
-  function showMessage(text) {
-    const message = document.getElementById("message");
-    message.textContent = text;
-
-    setTimeout(() => {
-      message.textContent = "";
-    }, 2500);
+  if(amount > points){
+    alert("⚠️ Không đủ điểm demo.");
+    return;
   }
 
-  updatePoints();
+  points -= amount;
+
+  history.unshift({
+    time:new Date().toLocaleString("vi-VN"),
+    text:"Yêu cầu rút " + asset + " (DEMO)",
+    amount:"-" + amount
+  });
+
+  save();
+  update();
+
+  alert(
+    "✅ Đã tạo yêu cầu rút DEMO.\n\n" +
+    "Tài sản: " + asset +
+    "\nĐiểm: " + amount +
+    "\n\nKhông có crypto thật được chuyển."
+  );
+}
+
+function copyReferral(){
+  const code = "UTIN-DEMO-2026";
+
+  navigator.clipboard?.writeText(code);
+
+  document.getElementById("refStatus").textContent =
+    "✅ Mã mời demo: " + code;
+}
+
+function renderHistory(){
+  const box = document.getElementById("history");
+
+  if(history.length === 0){
+    box.innerHTML = '<div class="muted">Chưa có lịch sử.</div>';
+    return;
+  }
+
+  box.innerHTML = history.slice(0,30).map(x =>
+    "<div>" +
+    "<b>" + x.amount + " 🪙</b> — " +
+    x.text +
+    "<br><span class='muted'>" + x.time + "</span>" +
+    "</div>"
+  ).join("");
+}
+
+function showPage(id,btn){
+  document.querySelectorAll(".page").forEach(p =>
+    p.classList.remove("active")
+  );
+
+  document.getElementById(id).classList.add("active");
+
+  document.querySelectorAll(".nav button").forEach(b =>
+    b.classList.remove("active")
+  );
+
+  btn.classList.add("active");
+
+  update();
+}
+
+setInterval(updateCheck,1000);
+update();
 </script>
 
 </body>
