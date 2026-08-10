@@ -3,330 +3,545 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mining App</title>
+<title>TON Ticket Miner</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+:root{
+    --ton:#0098ea;
+    --ton2:#00c2ff;
+    --bg:#07131a;
+    --card:#0d202b;
+    --card2:#102936;
+    --text:#fff;
+    --muted:#8fa7b3;
+    --red:#ef4444;
+    --green:#35e08b;
 }
 
-body {
-    font-family: Arial, sans-serif;
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
     background:
-        radial-gradient(circle at top, #25213f 0%, #0d0b17 45%, #08070d 100%);
-    color: white;
-    min-height: 100vh;
+        radial-gradient(circle at 50% -10%,#064e70 0,#07131a 42%,#040b10 100%);
+    color:var(--text);
+    min-height:100vh;
 }
 
-.app {
-    width: 100%;
-    max-width: 480px;
-    min-height: 100vh;
-    margin: auto;
-    padding-bottom: 90px;
+.app{
+    width:100%;
+    max-width:480px;
+    margin:auto;
+    min-height:100vh;
+    padding-bottom:92px;
 }
 
 /* HEADER */
-.header {
-    padding: 22px 20px 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+
+.header{
+    height:65px;
+    padding:15px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 }
 
-.logo {
-    font-size: 20px;
-    font-weight: 800;
+.logo{
+    font-size:20px;
+    font-weight:900;
+    letter-spacing:.5px;
 }
 
-.status {
-    font-size: 12px;
-    padding: 7px 10px;
-    border-radius: 20px;
-    background: #1b1927;
-    color: #9dffb0;
+.header-right{
+    display:flex;
+    gap:8px;
+}
+
+.icon-btn{
+    width:38px;
+    height:38px;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:13px;
+    background:#0d222e;
+    color:white;
+    cursor:pointer;
+    font-size:18px;
 }
 
 /* PAGES */
-.page {
-    display: none;
-    padding: 15px 18px;
+
+.page{
+    display:none;
+    padding:10px 17px 20px;
 }
 
-.page.active {
-    display: block;
+.page.active{
+    display:block;
 }
 
-/* BALANCE */
-.balance-card {
-    margin-top: 12px;
-    padding: 28px 20px;
-    border-radius: 25px;
-    background: linear-gradient(145deg, #27213f, #151321);
-    border: 1px solid rgba(255,255,255,.08);
-    text-align: center;
-    box-shadow: 0 15px 45px rgba(0,0,0,.3);
+/* TICKET */
+
+.ticket-card{
+    margin-top:8px;
+    padding:24px 18px;
+    border-radius:26px;
+    background:linear-gradient(145deg,#0e2a38,#0a1c25);
+    border:1px solid rgba(0,194,255,.16);
+    box-shadow:0 18px 50px rgba(0,0,0,.3);
+    text-align:center;
 }
 
-.balance-label {
-    font-size: 13px;
-    color: #a8a4b8;
+.ticket-label{
+    color:var(--muted);
+    font-size:13px;
 }
 
-.balance {
-    font-size: 38px;
-    font-weight: 900;
-    margin: 8px 0;
+.ticket{
+    margin:8px 0;
+    font-size:34px;
+    font-weight:900;
+    color:#ff4b4b;
 }
 
-.coin-name {
-    color: #a58bff;
-    font-weight: bold;
+.ton-symbol{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    background:#fff;
+    color:#0098ea;
+    font-size:16px;
+    font-weight:900;
+    vertical-align:middle;
+    margin-right:5px;
 }
 
-.speed {
-    margin-top: 10px;
-    color: #8ef7a5;
-    font-size: 13px;
+.mining-rate{
+    color:#61d8ff;
+    font-size:13px;
 }
 
-/* MINING */
-.mine-button {
-    width: 100%;
-    margin-top: 18px;
-    padding: 17px;
-    border: 0;
-    border-radius: 17px;
-    background: linear-gradient(135deg, #8b5cf6, #6d3df0);
-    color: white;
-    font-size: 17px;
-    font-weight: 800;
-    cursor: pointer;
-    box-shadow: 0 10px 30px rgba(110,61,240,.3);
+/* FAN */
+
+.miner-area{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin:22px 0 18px;
 }
 
-.mine-button.running {
-    background: linear-gradient(135deg, #ef4444, #c026d3);
+.fan{
+    width:205px;
+    height:205px;
+    border-radius:50%;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+        radial-gradient(circle,#123a4d 0 17%,#0a202c 18% 52%,#08202b 53% 100%);
+    border:7px solid #17495e;
+    box-shadow:
+        0 0 45px rgba(0,152,234,.18),
+        inset 0 0 35px rgba(0,0,0,.5);
+}
+
+.blades{
+    width:150px;
+    height:150px;
+    position:absolute;
+}
+
+.blade{
+    position:absolute;
+    width:45px;
+    height:88px;
+    left:52px;
+    top:30px;
+    background:linear-gradient(180deg,#20bfff,#087bb6);
+    border-radius:60% 12% 60% 12%;
+    transform-origin:50% 95%;
+}
+
+.blade:nth-child(1){transform:rotate(0deg);}
+.blade:nth-child(2){transform:rotate(72deg);}
+.blade:nth-child(3){transform:rotate(144deg);}
+.blade:nth-child(4){transform:rotate(216deg);}
+.blade:nth-child(5){transform:rotate(288deg);}
+
+.fan-center{
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    background:linear-gradient(145deg,#1ab8f5,#007dbd);
+    border:5px solid #07384d;
+    z-index:2;
+}
+
+.fan.spinning .blades{
+    animation:spin 1.2s linear infinite;
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg);}
+}
+
+.mining-state{
+    margin-top:12px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* BUTTON */
+
+.mine-btn{
+    width:100%;
+    padding:16px;
+    border:0;
+    border-radius:17px;
+    background:linear-gradient(135deg,#0098ea,#00c2ff);
+    color:white;
+    font-size:16px;
+    font-weight:900;
+    cursor:pointer;
+    box-shadow:0 10px 30px rgba(0,152,234,.22);
+}
+
+.mine-btn.running{
+    background:linear-gradient(135deg,#087bb6,#07587f);
 }
 
 /* STATS */
-.stats {
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: 12px;
-    margin-top: 15px;
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-top:12px;
 }
 
-.stat {
-    padding: 17px;
-    background: #151321;
-    border-radius: 17px;
-    border: 1px solid rgba(255,255,255,.06);
+.stat{
+    padding:16px;
+    border-radius:16px;
+    background:var(--card);
+    border:1px solid rgba(255,255,255,.05);
 }
 
-.stat small {
-    color: #8f8a9d;
+.stat small{
+    color:var(--muted);
+    font-size:11px;
 }
 
-.stat strong {
-    display: block;
-    margin-top: 7px;
+.stat strong{
+    display:block;
+    margin-top:7px;
+    font-size:15px;
+}
+
+/* CLAIM */
+
+.claim-box{
+    margin-top:14px;
+    padding:17px;
+    background:var(--card);
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.05);
+}
+
+.claim-head{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
+}
+
+.progress{
+    height:8px;
+    background:#18323f;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#0098ea,#00d0ff);
+}
+
+.claim-btn{
+    width:100%;
+    margin-top:12px;
+    padding:12px;
+    border:0;
+    border-radius:12px;
+    background:#17475d;
+    color:#8caeba;
+    font-weight:bold;
+}
+
+.claim-btn.ready{
+    background:#0098ea;
+    color:white;
 }
 
 /* SECTION */
-.section-title {
-    margin: 24px 0 12px;
-    font-size: 17px;
-}
 
-/* MACHINE */
-.machine {
-    background: #151321;
-    border-radius: 20px;
-    padding: 18px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid rgba(255,255,255,.06);
-}
-
-.machine-icon {
-    font-size: 35px;
-}
-
-.machine-info {
-    flex: 1;
-    margin-left: 14px;
-}
-
-.machine-info small {
-    color: #9290a0;
-}
-
-.upgrade {
-    border: 0;
-    padding: 10px 13px;
-    border-radius: 12px;
-    background: #28233a;
-    color: white;
-    cursor: pointer;
-}
-
-/* TASK */
-.task {
-    padding: 17px;
-    background: #151321;
-    border-radius: 18px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.task-info {
-    flex: 1;
-}
-
-.task-info small {
-    display: block;
-    color: #8f8a9d;
-    margin-top: 5px;
-}
-
-.task button {
-    border: 0;
-    padding: 9px 12px;
-    border-radius: 10px;
-    background: #8b5cf6;
-    color: white;
+.section-title{
+    margin:20px 0 11px;
+    font-size:17px;
 }
 
 /* FRIENDS */
-.ref-box {
-    background: #151321;
-    padding: 20px;
-    border-radius: 20px;
-    text-align: center;
+
+.ref-box,
+.wallet-card,
+.shop-card{
+    background:var(--card);
+    border-radius:20px;
+    padding:19px;
+    border:1px solid rgba(255,255,255,.05);
 }
 
-.ref-code {
-    margin: 15px 0;
-    padding: 13px;
-    background: #0c0a12;
-    border-radius: 12px;
-    font-weight: bold;
-    letter-spacing: 2px;
+.ref-link{
+    padding:13px;
+    margin:14px 0;
+    background:#07131a;
+    border-radius:12px;
+    color:#7edcff;
+    font-size:12px;
+    word-break:break-all;
 }
 
-.share {
-    width: 100%;
-    border: 0;
-    padding: 13px;
-    border-radius: 12px;
-    background: #8b5cf6;
-    color: white;
-    font-weight: bold;
+.action-btn{
+    width:100%;
+    padding:13px;
+    border:0;
+    border-radius:12px;
+    background:#0098ea;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* TASKS */
+
+.task{
+    padding:16px;
+    background:var(--card);
+    border-radius:17px;
+    margin-bottom:10px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.task-info{
+    flex:1;
+}
+
+.task-info small{
+    display:block;
+    color:var(--muted);
+    margin-top:5px;
+}
+
+.task button{
+    border:0;
+    padding:10px 12px;
+    border-radius:10px;
+    background:#0098ea;
+    color:white;
+    font-weight:bold;
 }
 
 /* WALLET */
-.wallet-card {
-    padding: 22px;
-    background: linear-gradient(145deg,#1c1830,#111019);
-    border-radius: 22px;
+
+.wallet-balance{
+    font-size:31px;
+    font-weight:900;
+    margin:8px 0 4px;
 }
 
-.wallet-balance {
-    font-size: 31px;
-    font-weight: 900;
-    margin: 10px 0 20px;
+.wallet-ton{
+    color:#61d8ff;
 }
 
-.wallet-btns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+.wallet-item{
+    padding:15px;
+    margin-top:10px;
+    background:#081720;
+    border-radius:14px;
 }
 
-.wallet-btns button {
-    padding: 13px;
-    border: 0;
-    border-radius: 12px;
-    background: #28233a;
-    color: white;
+.wallet-item small{
+    color:var(--muted);
 }
 
-/* PROFILE */
-.profile {
-    text-align: center;
+.wallet-item strong{
+    display:block;
+    margin-top:6px;
 }
 
-.avatar {
-    width: 75px;
-    height: 75px;
-    border-radius: 50%;
-    background: linear-gradient(135deg,#8b5cf6,#ec4899);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    margin: 20px auto 12px;
+.wallet-address{
+    margin-top:8px;
+    font-size:11px;
+    color:#8caeba;
+    word-break:break-all;
+}
+
+.history{
+    padding:13px 0;
+    border-bottom:1px solid rgba(255,255,255,.06);
+    display:flex;
+    justify-content:space-between;
+}
+
+.history small{
+    color:var(--muted);
+}
+
+/* SHOP */
+
+.shop-card{
+    margin-bottom:12px;
+}
+
+.shop-icon{
+    font-size:35px;
+}
+
+.shop-card h3{
+    margin:8px 0;
+}
+
+.shop-card p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+}
+
+.shop-btn{
+    width:100%;
+    margin-top:13px;
+    padding:12px;
+    border:0;
+    border-radius:12px;
+    background:#0098ea;
+    color:white;
+    font-weight:bold;
+}
+
+/* SETTINGS */
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    display:none;
+    align-items:flex-end;
+    z-index:30;
+}
+
+.overlay.show{
+    display:flex;
+}
+
+.settings{
+    width:min(480px,100%);
+    margin:auto;
+    background:#0b202b;
+    border-radius:25px 25px 0 0;
+    padding:22px;
+}
+
+.setting-row{
+    padding:16px 0;
+    border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.setting-row label{
+    display:block;
+    margin-bottom:10px;
+}
+
+input[type=range]{
+    width:100%;
+    accent-color:#0098ea;
+}
+
+.close-settings{
+    margin-top:17px;
+    width:100%;
+    padding:13px;
+    border:0;
+    border-radius:12px;
+    background:#17475d;
+    color:white;
 }
 
 /* NAV */
-.nav {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(480px,100%);
-    padding: 10px 8px;
-    background: rgba(12,10,18,.94);
-    backdrop-filter: blur(15px);
-    border-top: 1px solid rgba(255,255,255,.07);
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    z-index: 10;
+
+.nav{
+    position:fixed;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(480px,100%);
+    background:rgba(5,17,23,.96);
+    backdrop-filter:blur(15px);
+    border-top:1px solid rgba(255,255,255,.07);
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    padding:8px 5px;
+    z-index:20;
 }
 
-.nav button {
-    border: 0;
-    background: transparent;
-    color: #777282;
-    padding: 7px 2px;
-    font-size: 11px;
-    cursor: pointer;
+.nav button{
+    border:0;
+    background:none;
+    color:#607782;
+    padding:5px 2px;
+    font-size:10px;
+    cursor:pointer;
 }
 
-.nav button span {
-    display: block;
-    font-size: 21px;
-    margin-bottom: 3px;
+.nav button span{
+    display:block;
+    font-size:20px;
+    margin-bottom:3px;
 }
 
-.nav button.active {
-    color: #a78bfa;
+.nav button.active{
+    color:#00b7ff;
 }
 
-/* COIN EFFECT */
-.coin-pop {
-    position: fixed;
-    pointer-events: none;
-    font-weight: bold;
-    color: #a78bfa;
-    animation: pop 1s ease-out forwards;
+/* TOAST */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:100px;
+    transform:translateX(-50%) translateY(20px);
+    background:#102d3b;
+    border:1px solid rgba(0,194,255,.2);
+    padding:12px 18px;
+    border-radius:13px;
+    opacity:0;
+    pointer-events:none;
+    transition:.25s;
+    z-index:50;
+    white-space:nowrap;
 }
 
-@keyframes pop {
-    from {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateY(-60px);
-        opacity: 0;
-    }
+.toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
 }
 </style>
 </head>
@@ -336,176 +551,451 @@ body {
 <div class="app">
 
 <header class="header">
-    <div class="logo">⚡ MINER</div>
-    <div class="status" id="status">● Offline</div>
+    <div class="logo">TON ⛏️ MINER</div>
+
+    <div class="header-right">
+        <button class="icon-btn" onclick="openSettings()">⚙️</button>
+    </div>
 </header>
 
-<!-- MINING -->
-<section id="mining" class="page active">
 
-    <div class="balance-card">
-        <div class="balance-label">Số dư hiện tại</div>
-        <div class="balance" id="balance">0.000000</div>
-        <div class="coin-name">MINER COIN</div>
-        <div class="speed">
-            ⚡ +<span id="speed">0.000001</span> / giây
+<!-- ================= ĐÀO ================= -->
+
+<section id="mine" class="page active">
+
+    <div class="ticket-card">
+
+        <div class="ticket-label">
+            Vé TON hiện có
         </div>
+
+        <div class="ticket">
+            <span class="ton-symbol">TON</span>
+            <span id="tickets">0</span>
+        </div>
+
+        <div class="mining-rate">
+            ⛏️ Tốc độ: 25.000 vé / giờ
+        </div>
+
     </div>
 
-    <button class="mine-button" id="mineButton" onclick="toggleMining()">
+
+    <div class="miner-area">
+
+        <div class="fan" id="fan">
+
+            <div class="blades">
+                <div class="blade"></div>
+                <div class="blade"></div>
+                <div class="blade"></div>
+                <div class="blade"></div>
+                <div class="blade"></div>
+            </div>
+
+            <div class="fan-center"></div>
+
+        </div>
+
+        <div class="mining-state" id="miningState">
+            Máy đào đang tắt
+        </div>
+
+    </div>
+
+
+    <button class="mine-btn" id="mineBtn" onclick="toggleMining()">
         ▶ BẮT ĐẦU ĐÀO
     </button>
 
+
     <div class="stats">
+
         <div class="stat">
-            <small>Thời gian đào</small>
-            <strong id="time">00:00:00</strong>
+            <small>Thời gian phiên</small>
+            <strong id="sessionTime">00:00:00</strong>
         </div>
 
         <div class="stat">
-            <small>Tổng đã đào</small>
-            <strong id="total">0.000000</strong>
+            <small>Tổng vé đã đào</small>
+            <strong id="totalTickets">0</strong>
         </div>
+
     </div>
 
-    <h3 class="section-title">⚙️ Máy đào</h3>
 
-    <div class="machine">
-        <div class="machine-icon">⛏️</div>
+    <div class="claim-box">
 
-        <div class="machine-info">
-            <strong id="machineName">Basic Miner</strong>
-            <small>Power: <span id="power">1</span>x</small>
+        <div class="claim-head">
+            <strong>🎟️ Claim vé</strong>
+            <span id="claimTimer">04:00:00</span>
         </div>
 
-        <button class="upgrade" onclick="upgradeMachine()">
-            Nâng cấp
+        <div class="progress">
+            <div class="progress-bar" id="progress"></div>
+        </div>
+
+        <button class="claim-btn" id="claimBtn" onclick="claimReward()">
+            🔒 Chưa đủ 4 tiếng
         </button>
+
     </div>
 
 </section>
 
-<!-- FRIENDS -->
+
+<!-- ================= BẠN BÈ ================= -->
+
 <section id="friends" class="page">
 
-    <h2>👥 Mời bạn bè</h2>
+    <h2>👥 Bạn bè</h2>
 
-    <div class="ref-box" style="margin-top:20px">
+    <div class="stats">
 
-        <p>Giới thiệu bạn bè để nhận reward</p>
-
-        <div class="ref-code">
-            MINER-8X29K
+        <div class="stat">
+            <small>Người bạn đã giới thiệu</small>
+            <strong id="refCount">0</strong>
         </div>
 
-        <button class="share" onclick="shareReferral()">
-            🔗 Chia sẻ link
-        </button>
-
-        <div class="stats">
-            <div class="stat">
-                <small>Đã mời</small>
-                <strong id="friendsCount">0</strong>
-            </div>
-
-            <div class="stat">
-                <small>Reward</small>
-                <strong>0.000000</strong>
-            </div>
+        <div class="stat">
+            <small>Thu nhập giới thiệu</small>
+            <strong id="refIncome">0 vé</strong>
         </div>
 
     </div>
 
+
+    <div class="ref-box" style="margin-top:12px;text-align:center">
+
+        <div style="font-size:35px">🔗</div>
+
+        <h3 style="margin-top:8px">
+            Chia sẻ liên kết này cho bạn bè của bạn
+        </h3>
+
+        <p style="color:var(--muted);font-size:13px;margin-top:8px;line-height:1.5">
+            Nhận <b style="color:#00c2ff">10% hoa hồng</b>
+            từ reward referral đủ điều kiện của bạn bè.
+        </p>
+
+        <div class="ref-link" id="refLink">
+            https://your-app.com/?ref=MINER8X29K
+        </div>
+
+        <button class="action-btn" onclick="copyReferral()">
+            📋 Sao chép liên kết
+        </button>
+
+    </div>
+
+
+    <h3 class="section-title">🎁 Mốc thưởng</h3>
+
+    <div class="task">
+        <div class="task-info">
+            <strong>5 người</strong>
+            <small>+50.000 Vé TON</small>
+        </div>
+    </div>
+
+    <div class="task">
+        <div class="task-info">
+            <strong>10 người</strong>
+            <small>+100.000 Vé TON</small>
+        </div>
+    </div>
+
+    <div class="task">
+        <div class="task-info">
+            <strong>20 người</strong>
+            <small>+250.000 Vé TON</small>
+        </div>
+    </div>
+
+    <div class="task">
+        <div class="task-info">
+            <strong>50 người</strong>
+            <small>+500.000 Vé TON</small>
+        </div>
+    </div>
+
+    <div class="task">
+        <div class="task-info">
+            <strong>100 người</strong>
+            <small>+1.000.000 Vé TON</small>
+        </div>
+    </div>
+
 </section>
 
-<!-- TASKS -->
+
+<!-- ================= NHIỆM VỤ ================= -->
+
 <section id="tasks" class="page">
 
     <h2>🎯 Nhiệm vụ</h2>
 
-    <div style="margin-top:20px">
+    <div style="margin-top:18px">
 
         <div class="task">
             <div class="task-info">
-                <strong>⛏️ Đào 10 phút</strong>
-                <small>Reward: +0.000100 coin</small>
+                <strong>📺 Xem quảng cáo</strong>
+                <small>Reward: +50.000 Vé TON</small>
             </div>
-            <button onclick="claimTask(this)">Nhận</button>
+            <button onclick="watchAd(this)">
+                Xem
+            </button>
         </div>
 
         <div class="task">
             <div class="task-info">
-                <strong>👥 Mời 1 người</strong>
-                <small>Reward: +0.001000 coin</small>
+                <strong>📺 Xem quảng cáo</strong>
+                <small>Reward: +50.000 Vé TON</small>
             </div>
-            <button onclick="claimTask(this)">Nhận</button>
+            <button onclick="watchAd(this)">
+                Xem
+            </button>
         </div>
 
         <div class="task">
             <div class="task-info">
-                <strong>🔥 Đăng nhập hôm nay</strong>
-                <small>Reward: +0.000050 coin</small>
+                <strong>📺 Xem quảng cáo</strong>
+                <small>Reward: +50.000 Vé TON</small>
             </div>
-            <button onclick="claimTask(this)">Nhận</button>
+            <button onclick="watchAd(this)">
+                Xem
+            </button>
+        </div>
+
+        <div class="task">
+            <div class="task-info">
+                <strong>👥 Mời 5 người</strong>
+                <small>Reward: +50.000 Vé TON</small>
+            </div>
+            <button onclick="showToast('Xem tiến độ ở mục Bạn bè')">
+                Xem
+            </button>
         </div>
 
     </div>
 
 </section>
 
-<!-- WALLET -->
+
+<!-- ================= CỬA HÀNG ================= -->
+
+<section id="shop" class="page">
+
+    <h2>🛒 Cửa hàng</h2>
+
+    <div class="shop-card" style="margin-top:18px">
+
+        <div class="shop-icon">🔄</div>
+
+        <h3>Đổi vé TON</h3>
+
+        <p>
+            4.500.000 Vé TON → 0,01 TON
+        </p>
+
+        <p style="margin-top:6px">
+            Mức quy đổi tối thiểu: <b>1 TON</b>
+        </p>
+
+        <button class="shop-btn" onclick="convertTickets()">
+            🔄 Quy đổi
+        </button>
+
+    </div>
+
+
+    <div class="shop-card">
+
+        <div class="shop-icon">⛏️</div>
+
+        <h3>Máy đào</h3>
+
+        <p>
+            Mua máy đào để tăng tốc độ tích lũy vé.
+        </p>
+
+        <p style="margin-top:6px">
+            Máy hiện tại: <b id="machineLevel">Basic Miner</b>
+        </p>
+
+        <button class="shop-btn" onclick="upgradeMachine()">
+            ⬆️ Nâng cấp máy
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ================= VÍ ================= -->
+
 <section id="wallet" class="page">
 
     <h2>👛 Ví</h2>
 
-    <div class="wallet-card" style="margin-top:20px">
+    <div class="wallet-card" style="margin-top:18px">
 
-        <div class="balance-label">Số dư</div>
+        <small style="color:var(--muted)">
+            Số lượng Vé TON đã đào
+        </small>
 
         <div class="wallet-balance">
-            <span id="walletBalance">0.000000</span>
+            <span id="walletTickets">0</span>
         </div>
 
-        <div class="balance-label">
-            TON Wallet
-        </div>
-
-        <div style="
-            margin-top:10px;
-            padding:12px;
-            background:#0b0910;
-            border-radius:12px;
-            font-size:11px;
-            word-break:break-all;
-            color:#999;
-        ">
-            YOUR_TON_WALLET_ADDRESS
-        </div>
-
-        <div class="wallet-btns" style="margin-top:15px">
-            <button onclick="deposit()">↓ Nạp</button>
-            <button onclick="withdraw()">↑ Rút</button>
+        <div class="wallet-ton">
+            Quy đổi tối thiểu: 1 TON
         </div>
 
     </div>
 
-    <h3 class="section-title">Lịch sử</h3>
 
-    <div class="task">
-        <div>
-            <strong>Chưa có giao dịch</strong>
-            <small>Giao dịch sẽ xuất hiện ở đây</small>
+    <div class="wallet-item">
+        <small>⏳ Đang chờ thanh toán</small>
+        <strong id="pending">0 TON</strong>
+    </div>
+
+    <div class="wallet-item">
+        <small>✅ Đã thanh toán</small>
+        <strong id="paid">0 TON</strong>
+    </div>
+
+    <div class="wallet-item">
+
+        <small>🔗 Phương thức thanh toán</small>
+
+        <strong id="walletStatus">
+            Chưa liên kết ví
+        </strong>
+
+        <div class="wallet-address" id="walletAddress">
+            Chưa có địa chỉ ví
+        </div>
+
+        <button
+            class="action-btn"
+            style="margin-top:12px"
+            onclick="connectWallet()">
+            🔗 Kết nối ví TON
+        </button>
+
+    </div>
+
+
+    <h3 class="section-title">
+        📅 Lần thanh toán tiếp theo
+    </h3>
+
+    <div class="wallet-item">
+        <strong id="nextPayment">
+            Chưa có yêu cầu quy đổi
+        </strong>
+    </div>
+
+
+    <h3 class="section-title">
+        📜 Lịch sử rút
+    </h3>
+
+    <div class="wallet-item">
+        <div class="history">
+            <div>
+                <strong>Chưa có giao dịch</strong>
+                <small> </small>
+            </div>
+            <span>—</span>
         </div>
     </div>
 
 </section>
 
+
 </div>
 
+
+<!-- ================= SETTINGS ================= -->
+
+<div class="overlay" id="settingsOverlay">
+
+    <div class="settings">
+
+        <h2>⚙️ Cài đặt</h2>
+
+        <div class="setting-row">
+
+            <label>🌐 Ngôn ngữ</label>
+
+            <select
+                id="language"
+                style="
+                width:100%;
+                padding:12px;
+                border:0;
+                border-radius:10px;
+                background:#07131a;
+                color:white;
+                "
+                onchange="changeLanguage()">
+
+                <option value="vi">🇻🇳 Tiếng Việt</option>
+                <option value="en">🇬🇧 English</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="setting-row">
+
+            <label>🔊 Âm lượng</label>
+
+            <input
+                type="range"
+                min="0"
+                max="100"
+                value="70"
+                id="volume">
+
+        </div>
+
+
+        <div class="setting-row">
+
+            <label>
+                🔔 Âm thanh
+            </label>
+
+            <button
+                class="action-btn"
+                onclick="toggleSound()"
+                id="soundBtn">
+                🔊 Đang bật
+            </button>
+
+        </div>
+
+
+        <button
+            class="close-settings"
+            onclick="closeSettings()">
+            Đóng
+        </button>
+
+    </div>
+
+</div>
+
+
 <!-- NAV -->
+
 <nav class="nav">
 
-    <button class="active" onclick="showPage('mining',this)">
+    <button class="active" onclick="showPage('mine',this)">
         <span>⛏️</span>
         Đào
     </button>
@@ -520,6 +1010,11 @@ body {
         Nhiệm vụ
     </button>
 
+    <button onclick="showPage('shop',this)">
+        <span>🛒</span>
+        Cửa hàng
+    </button>
+
     <button onclick="showPage('wallet',this)">
         <span>👛</span>
         Ví
@@ -527,225 +1022,432 @@ body {
 
 </nav>
 
+
+<div class="toast" id="toast"></div>
+
+
 <script>
 
-let balance = 0;
-let total = 0;
+/* ================= DATA ================= */
+
+let tickets = 0;
+let totalTickets = 0;
 
 let mining = false;
+let miningSeconds = 0;
 
-let speed = 0.000001;
+let machinePower = 1;
 
-let power = 1;
+let claimSeconds = 0;
+const CLAIM_TIME = 4 * 60 * 60;
 
-let seconds = 0;
-
-let interval = null;
+let soundEnabled = true;
 
 
-/* CHUYỂN TRANG */
+/* ================= PAGE ================= */
 
-function showPage(page, button) {
+function showPage(page,button){
 
-    document.querySelectorAll('.page')
-        .forEach(p => p.classList.remove('active'));
+    document.querySelectorAll(".page")
+        .forEach(p => p.classList.remove("active"));
 
     document.getElementById(page)
-        .classList.add('active');
+        .classList.add("active");
 
-    document.querySelectorAll('.nav button')
-        .forEach(b => b.classList.remove('active'));
+    document.querySelectorAll(".nav button")
+        .forEach(b => b.classList.remove("active"));
 
-    button.classList.add('active');
+    button.classList.add("active");
 
 }
 
 
-/* ĐÀO */
+/* ================= MINING ================= */
 
-function toggleMining() {
+function toggleMining(){
 
     mining = !mining;
 
-    const button = document.getElementById('mineButton');
-    const status = document.getElementById('status');
+    const fan =
+        document.getElementById("fan");
 
-    if (mining) {
+    const btn =
+        document.getElementById("mineBtn");
 
-        button.innerText = "⏹ DỪNG ĐÀO";
-        button.classList.add("running");
+    const state =
+        document.getElementById("miningState");
 
-        status.innerText = "● Đang đào";
+    if(mining){
 
-        interval = setInterval(() => {
+        fan.classList.add("spinning");
 
-            const amount = speed * power;
+        btn.classList.add("running");
 
-            balance += amount;
-            total += amount;
+        btn.innerText = "⏹ DỪNG ĐÀO";
 
-            seconds++;
+        state.innerText =
+            "🟢 Máy đào đang hoạt động";
 
-            updateDisplay();
+        showToast("⛏️ Bắt đầu đào!");
 
-            createCoinEffect();
+    }else{
 
-        },1000);
+        fan.classList.remove("spinning");
 
-    } else {
+        btn.classList.remove("running");
 
-        button.innerText = "▶ BẮT ĐẦU ĐÀO";
-        button.classList.remove("running");
+        btn.innerText = "▶ BẮT ĐẦU ĐÀO";
 
-        status.innerText = "● Offline";
-
-        clearInterval(interval);
-
-    }
-
-}
-
-
-/* HIỂN THỊ */
-
-function updateDisplay() {
-
-    document.getElementById("balance")
-        .innerText = balance.toFixed(6);
-
-    document.getElementById("total")
-        .innerText = total.toFixed(6);
-
-    document.getElementById("walletBalance")
-        .innerText = balance.toFixed(6);
-
-    document.getElementById("speed")
-        .innerText = (speed * power).toFixed(6);
-
-    let h = Math.floor(seconds / 3600);
-    let m = Math.floor((seconds % 3600) / 60);
-    let s = seconds % 60;
-
-    document.getElementById("time")
-        .innerText =
-        String(h).padStart(2,'0') + ":" +
-        String(m).padStart(2,'0') + ":" +
-        String(s).padStart(2,'0');
-
-}
-
-
-/* NÂNG CẤP */
-
-function upgradeMachine() {
-
-    power++;
-
-    document.getElementById("power")
-        .innerText = power;
-
-    document.getElementById("machineName")
-        .innerText = "Miner Level " + power;
-
-    alert("⚙️ Máy đào đã nâng cấp!");
-
-}
-
-
-/* NHIỆM VỤ */
-
-function claimTask(button) {
-
-    button.innerText = "✓ Đã nhận";
-    button.disabled = true;
-
-    balance += 0.0001;
-    total += 0.0001;
-
-    updateDisplay();
-
-}
-
-
-/* CHIA SẺ */
-
-function shareReferral() {
-
-    if (navigator.share) {
-
-        navigator.share({
-            title: "MINER",
-            text: "Tham gia MINER cùng tôi!",
-            url: window.location.href
-        });
-
-    } else {
-
-        navigator.clipboard.writeText(window.location.href);
-
-        alert("Đã copy link!");
+        state.innerText =
+            "Máy đào đang tắt";
 
     }
 
 }
 
 
-/* NẠP */
+/*
+  DEMO:
+  4 tiếng = 100.000 vé.
+  Tốc độ nội bộ được tính tương ứng.
+*/
 
-function deposit() {
+setInterval(() => {
 
-    alert(
-        "Đây là bản demo.\n\n" +
-        "Sau này phần này sẽ kết nối TON blockchain."
-    );
+    if(mining){
 
-}
+        miningSeconds++;
+
+        const ticketsPerSecond =
+            (100000 / CLAIM_TIME) * machinePower;
+
+        tickets += ticketsPerSecond;
+
+        totalTickets += ticketsPerSecond;
+
+    }
+
+    if(claimSeconds < CLAIM_TIME){
+
+        claimSeconds++;
+
+    }
+
+    updateUI();
+
+},1000);
 
 
-/* RÚT */
+/* ================= CLAIM ================= */
 
-function withdraw() {
+function claimReward(){
 
-    if(balance <= 0) {
+    if(claimSeconds < CLAIM_TIME){
 
-        alert("Số dư chưa đủ để rút.");
+        showToast("⏳ Chưa đủ 4 tiếng!");
 
         return;
 
     }
 
-    alert(
-        "Đây là bản demo.\n\n" +
-        "Phần rút TON thật sẽ được kết nối backend sau."
+    /*
+      Demo claim:
+      100.000 vé cơ bản.
+      Trong bản thật quảng cáo phải được
+      xác nhận bởi hệ thống quảng cáo/backend.
+    */
+
+    tickets += 100000;
+    totalTickets += 100000;
+
+    claimSeconds = 0;
+
+    showToast("🎟️ Đã nhận 100.000 Vé TON!");
+
+    updateUI();
+
+    /*
+      Sau claim có thể hiện lựa chọn:
+      - Nhận 100.000
+      - Xem thêm quảng cáo để x2
+    */
+
+}
+
+
+/* ================= WATCH AD ================= */
+
+function watchAd(button){
+
+    /*
+      Đây chỉ là mô phỏng quảng cáo.
+      Chưa kết nối ad network thật.
+    */
+
+    button.disabled = true;
+    button.innerText = "⏳";
+
+    setTimeout(() => {
+
+        tickets += 50000;
+        totalTickets += 50000;
+
+        button.innerText = "✓ Đã nhận";
+        button.style.background = "#1b6248";
+
+        showToast("🎁 +50.000 Vé TON");
+
+        updateUI();
+
+    },1500);
+
+}
+
+
+/* ================= REFERRAL ================= */
+
+function copyReferral(){
+
+    const link =
+        document.getElementById("refLink").innerText;
+
+    navigator.clipboard.writeText(link);
+
+    showToast("🔗 Đã sao chép liên kết!");
+
+}
+
+
+/* ================= SHOP ================= */
+
+function convertTickets(){
+
+    const required = 450000000;
+
+    if(tickets < required){
+
+        showToast(
+            "❌ Cần 450.000.000 Vé TON để quy đổi 1 TON"
+        );
+
+        return;
+
+    }
+
+    tickets -= required;
+
+    document.getElementById("pending")
+        .innerText = "1 TON";
+
+    document.getElementById("nextPayment")
+        .innerText = "Đang chờ xử lý";
+
+    showToast(
+        "⏳ Yêu cầu quy đổi đã được tạo"
+    );
+
+    updateUI();
+
+}
+
+
+function upgradeMachine(){
+
+    machinePower++;
+
+    document.getElementById("machineLevel")
+        .innerText =
+        "Miner Level " + machinePower;
+
+    showToast(
+        "⚙️ Máy đào đã nâng cấp!"
     );
 
 }
 
 
-/* HIỆU ỨNG */
+/* ================= WALLET ================= */
 
-function createCoinEffect() {
+function connectWallet(){
 
-    if(Math.random() > 0.15) return;
+    /*
+      Prototype:
+      Chưa gọi TON Connect thật.
+      Khi triển khai Mini App thật sẽ tích hợp
+      TON Connect để người dùng tự xác nhận
+      kết nối trong ví.
+    */
 
-    const coin = document.createElement("div");
-
-    coin.className = "coin-pop";
-
-    coin.innerText = "+";
-
-    coin.style.left =
-        (Math.random() * 70 + 15) + "%";
-
-    coin.style.top = "45%";
-
-    document.body.appendChild(coin);
-
-    setTimeout(() => coin.remove(),1000);
+    showToast(
+        "🔗 Bản demo: TON Connect sẽ được tích hợp sau"
+    );
 
 }
 
-updateDisplay();
+
+/* ================= SETTINGS ================= */
+
+function openSettings(){
+
+    document
+        .getElementById("settingsOverlay")
+        .classList.add("show");
+
+}
+
+function closeSettings(){
+
+    document
+        .getElementById("settingsOverlay")
+        .classList.remove("show");
+
+}
+
+function toggleSound(){
+
+    soundEnabled = !soundEnabled;
+
+    document.getElementById("soundBtn")
+        .innerText =
+        soundEnabled
+        ? "🔊 Đang bật"
+        : "🔇 Đã tắt";
+
+}
+
+
+/* ================= LANGUAGE ================= */
+
+function changeLanguage(){
+
+    const lang =
+        document.getElementById("language").value;
+
+    if(lang === "en"){
+
+        showToast(
+            "English mode is prepared for the next UI update."
+        );
+
+    }else{
+
+        showToast(
+            "Đã chọn Tiếng Việt"
+        );
+
+    }
+
+}
+
+
+/* ================= UI ================= */
+
+function updateUI(){
+
+    document.getElementById("tickets")
+        .innerText =
+        Math.floor(tickets).toLocaleString("vi-VN");
+
+    document.getElementById("totalTickets")
+        .innerText =
+        Math.floor(totalTickets).toLocaleString("vi-VN");
+
+    document.getElementById("walletTickets")
+        .innerText =
+        Math.floor(tickets).toLocaleString("vi-VN");
+
+
+    let h =
+        Math.floor(miningSeconds / 3600);
+
+    let m =
+        Math.floor((miningSeconds % 3600) / 60);
+
+    let s =
+        miningSeconds % 60;
+
+    document.getElementById("sessionTime")
+        .innerText =
+        String(h).padStart(2,"0") + ":" +
+        String(m).padStart(2,"0") + ":" +
+        String(s).padStart(2,"0");
+
+
+    let remain =
+        Math.max(CLAIM_TIME - claimSeconds,0);
+
+    let rh =
+        Math.floor(remain / 3600);
+
+    let rm =
+        Math.floor((remain % 3600) / 60);
+
+    let rs =
+        remain % 60;
+
+    document.getElementById("claimTimer")
+        .innerText =
+        String(rh).padStart(2,"0") + ":" +
+        String(rm).padStart(2,"0") + ":" +
+        String(rs).padStart(2,"0");
+
+
+    const progress =
+        Math.min(
+            (claimSeconds / CLAIM_TIME) * 100,
+            100
+        );
+
+    document.getElementById("progress")
+        .style.width = progress + "%";
+
+
+    const claimBtn =
+        document.getElementById("claimBtn");
+
+    if(claimSeconds >= CLAIM_TIME){
+
+        claimBtn.classList.add("ready");
+
+        claimBtn.innerText =
+            "🎁 CLAIM 100.000 VÉ";
+
+    }else{
+
+        claimBtn.classList.remove("ready");
+
+        claimBtn.innerText =
+            "🔒 Chưa đủ 4 tiếng";
+
+    }
+
+}
+
+
+/* ================= TOAST ================= */
+
+let toastTimer;
+
+function showToast(text){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.innerText = text;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer =
+        setTimeout(() => {
+            toast.classList.remove("show");
+        },2200);
+
+}
+
+
+updateUI();
 
 </script>
 
