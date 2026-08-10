@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -7,32 +8,43 @@
 
 <style>
 :root{
-    --bg:#061018;
-    --card:#0c1b25;
-    --card2:#102632;
-    --line:#183846;
-    --text:#f4fbff;
-    --muted:#8ca5b4;
-    --blue:#19b8f0;
-    --blue2:#63dcff;
-    --green:#31e5aa;
+    --bg:#040b11;
+    --card:#0a1821;
+    --card2:#0d222e;
+    --line:#173542;
+    --text:#f3fbff;
+    --muted:#88a1ae;
+    --blue:#20c5f4;
+    --blue2:#76e6ff;
+    --green:#32e4aa;
 }
 
 *{
     box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
 html,body{
     margin:0;
     min-height:100%;
     background:
-        radial-gradient(circle at 50% -10%,#12435c 0,#071821 35%,#03090e 80%);
+        radial-gradient(
+            circle at 50% -15%,
+            #12465d 0,
+            #071821 38%,
+            #02070b 85%
+        );
     color:var(--text);
     font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
     overflow-x:hidden;
+}
+
+button{
+    font-family:inherit;
+    cursor:pointer;
 }
 
 .app{
@@ -60,16 +72,33 @@ body{
 }
 
 .logo{
-    width:42px;
-    height:42px;
+    width:44px;
+    height:44px;
     border-radius:14px;
     display:flex;
     align-items:center;
     justify-content:center;
+    background:
+        linear-gradient(145deg,#3bd5ff,#087aa7);
+    border:1px solid #66e1ff;
+    box-shadow:
+        0 0 20px #20c9f044,
+        inset 0 0 13px #ffffff18;
+}
+
+.ton-logo{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:18px;
     font-weight:900;
-    font-size:13px;
-    background:linear-gradient(145deg,#45d7ff,#087eaf);
-    box-shadow:0 8px 30px #00baff35;
+    background:#061720;
+    border:2px solid #82eaff;
+    box-shadow:0 0 13px #32d5ff66;
 }
 
 .brand-text b{
@@ -87,12 +116,12 @@ body{
     height:42px;
     border:1px solid var(--line);
     border-radius:14px;
-    background:#0c202b;
+    background:#0b202b;
     color:white;
     font-size:19px;
 }
 
-/* PAGES */
+/* PAGE */
 
 main{
     padding:8px 14px;
@@ -118,28 +147,28 @@ main{
     }
 }
 
-/* MAIN CARD */
+/* MAIN */
 
 .main-card{
     position:relative;
     overflow:hidden;
     padding:22px 18px;
-    border:1px solid #1b485d;
+    border:1px solid #1b4b61;
     border-radius:26px;
     background:
-        linear-gradient(145deg,#12364a,#081923);
-    box-shadow:0 18px 50px #0005;
+        linear-gradient(145deg,#113649,#071923);
+    box-shadow:0 18px 50px #0007;
 }
 
 .main-card:after{
     content:"";
     position:absolute;
-    width:180px;
-    height:180px;
+    width:190px;
+    height:190px;
+    right:-90px;
+    top:-90px;
     border-radius:50%;
-    right:-80px;
-    top:-80px;
-    background:#22bdf025;
+    background:#22bdf020;
 }
 
 .balance-label{
@@ -163,55 +192,95 @@ main{
 
 .rate{
     margin-top:9px;
-    color:#b5d4e1;
+    color:#b4d5e2;
     font-size:12px;
 }
 
-/* MINER */
+/* TURBINE */
 
 .miner{
-    width:190px;
-    height:190px;
+    width:206px;
+    height:206px;
     margin:25px auto 15px;
     border-radius:50%;
     display:flex;
     align-items:center;
     justify-content:center;
+
     background:
-        radial-gradient(circle,#173b4d 0,#0b202d 57%,#06121a 58%);
-    border:1px solid #28556a;
+        radial-gradient(
+            circle,
+            #153b4d 0,
+            #0b202d 57%,
+            #06121a 58%
+        );
+
+    border:1px solid #2b6178;
+
     box-shadow:
         0 0 0 11px #09202b,
-        0 0 55px #12b8ef22;
+        0 0 0 13px #123847,
+        0 0 55px #12b8ef25;
 }
 
 .fan{
     position:relative;
-    width:112px;
-    height:112px;
-    animation:spin 1.3s linear infinite;
+    width:128px;
+    height:128px;
+    border-radius:50%;
+
+    animation:turbineSpin 1.4s linear infinite;
     animation-play-state:paused;
+
+    background:
+        radial-gradient(
+            circle,
+            #07151d 0 31%,
+            #123544 32% 38%,
+            #07151d 39% 100%
+        );
+
+    border:4px solid #246277;
+
+    box-shadow:
+        0 0 0 7px #071923,
+        0 0 0 9px #183d4c,
+        0 0 30px #20c8f52c;
 }
 
 .mining .fan{
     animation-play-state:running;
 }
 
-@keyframes spin{
-    to{
-        transform:rotate(360deg);
-    }
-}
-
 .blade{
     position:absolute;
-    width:20px;
-    height:51px;
-    top:5px;
-    left:46px;
-    border-radius:16px 16px 7px 7px;
-    background:linear-gradient(#55ddff,#087eaf);
-    transform-origin:10px 51px;
+    width:27px;
+    height:57px;
+
+    left:47px;
+    top:8px;
+
+    border-radius:
+        18px 18px 9px 9px;
+
+    background:
+        linear-gradient(
+            160deg,
+            #8cecff 0%,
+            #32c9f0 42%,
+            #087ca8 100%
+        );
+
+    transform-origin:
+        13.5px 56px;
+
+    box-shadow:
+        inset -3px -5px 7px #00587866,
+        0 0 7px #2ed5ff33;
+}
+
+.blade:nth-child(1){
+    transform:rotate(0deg);
 }
 
 .blade:nth-child(2){
@@ -232,13 +301,56 @@ main{
 
 .fan-center{
     position:absolute;
-    width:38px;
-    height:38px;
-    left:37px;
-    top:37px;
+    width:48px;
+    height:48px;
+    left:36px;
+    top:36px;
+    z-index:10;
+
     border-radius:50%;
-    background:#07151d;
-    border:5px solid #49d9ff;
+
+    background:
+        radial-gradient(
+            circle at 35% 28%,
+            #d8faff 0%,
+            #65dcfa 18%,
+            #159ac5 48%,
+            #06394d 100%
+        );
+
+    border:4px solid #9beeff;
+
+    box-shadow:
+        0 0 18px #35d6ff88,
+        inset 0 0 12px #003347;
+}
+
+.fan-center:after{
+    content:"";
+    position:absolute;
+
+    width:13px;
+    height:13px;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    border-radius:50%;
+
+    background:#e0fbff;
+
+    box-shadow:0 0 10px #9beeff;
+}
+
+@keyframes turbineSpin{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
 }
 
 .mining-state{
@@ -258,12 +370,24 @@ main{
     color:white;
     font-weight:900;
     font-size:15px;
-    background:linear-gradient(135deg,#15b7f0,#087caf);
+
+    background:
+        linear-gradient(
+            135deg,
+            #15b7f0,
+            #087caf
+        );
+
     box-shadow:0 10px 28px #08a9e833;
 }
 
 .mine-btn.active{
-    background:linear-gradient(135deg,#2ee5aa,#119b7a);
+    background:
+        linear-gradient(
+            135deg,
+            #2ee5aa,
+            #119b7a
+        );
 }
 
 /* STATS */
@@ -305,7 +429,8 @@ main{
     padding:16px;
     border:1px solid var(--line);
     border-radius:18px;
-    background:linear-gradient(145deg,#0d202b,#08151d);
+    background:
+        linear-gradient(145deg,#0d202b,#08151d);
 }
 
 .row{
@@ -327,13 +452,19 @@ main{
 .progress-bar{
     width:0%;
     height:100%;
-    background:linear-gradient(90deg,var(--blue),var(--blue2));
+    background:
+        linear-gradient(
+            90deg,
+            var(--blue),
+            var(--blue2)
+        );
     transition:.3s;
 }
 
 .claim-btn{
     width:100%;
     padding:13px;
+    border:0;
     border-radius:13px;
     background:#173342;
     color:#91aab6;
@@ -345,7 +476,7 @@ main{
     color:#05281d;
 }
 
-/* TASKS */
+/* TASK */
 
 .task{
     display:flex;
@@ -412,7 +543,8 @@ main{
     padding:16px;
     border:1px solid var(--line);
     border-radius:19px;
-    background:linear-gradient(145deg,#0d202b,#08151d);
+    background:
+        linear-gradient(145deg,#0d202b,#08151d);
 }
 
 .machine{
@@ -450,7 +582,8 @@ main{
     padding:20px;
     border:1px solid #1b485d;
     border-radius:22px;
-    background:linear-gradient(145deg,#12364a,#081923);
+    background:
+        linear-gradient(145deg,#12364a,#081923);
 }
 
 .wallet-balance{
@@ -487,7 +620,7 @@ main{
     word-break:break-all;
 }
 
-/* BOTTOM NAV */
+/* NAV */
 
 .bottom-nav{
     position:fixed;
@@ -496,10 +629,15 @@ main{
     bottom:0;
     transform:translateX(-50%);
     width:min(100%,520px);
-    padding:8px 7px calc(8px + env(safe-area-inset-bottom));
+
+    padding:
+        8px 7px
+        calc(8px + env(safe-area-inset-bottom));
+
     display:grid;
     grid-template-columns:repeat(5,1fr);
     gap:4px;
+
     background:rgba(5,15,22,.95);
     backdrop-filter:blur(18px);
     border-top:1px solid var(--line);
@@ -532,8 +670,10 @@ main{
     position:fixed;
     z-index:50;
     inset:0;
+
     display:none;
     align-items:flex-end;
+
     background:#0009;
 }
 
@@ -544,8 +684,10 @@ main{
 .settings{
     width:min(100%,520px);
     padding:20px;
+
     border-radius:25px 25px 0 0;
     border:1px solid var(--line);
+
     background:#091720;
 }
 
@@ -589,17 +731,25 @@ main{
 .toast{
     position:fixed;
     z-index:100;
+
     left:50%;
     bottom:105px;
+
     transform:translate(-50%,20px);
+
     opacity:0;
     pointer-events:none;
+
     padding:11px 15px;
+
     border:1px solid #24566d;
     border-radius:13px;
+
     background:#102a38;
     color:white;
+
     font-size:13px;
+
     transition:.2s;
 }
 
@@ -610,6 +760,7 @@ main{
 </style>
 </head>
 
+
 <body>
 
 <div class="app">
@@ -619,7 +770,7 @@ main{
     <div class="brand">
 
         <div class="logo">
-            TON
+            <div class="ton-logo">T</div>
         </div>
 
         <div class="brand-text">
@@ -640,15 +791,14 @@ main{
 
 <main>
 
-<!-- ĐÀO -->
+<!-- ================= ĐÀO ================= -->
 
 <section
     id="mine"
     class="page active">
 
     <div
-        class="main-card"
-        id="mainCard">
+        class="main-card">
 
         <div class="balance-label">
             Vé TON hiện có
@@ -673,7 +823,8 @@ main{
 
 
         <div
-            class="miner">
+            class="miner"
+            id="miner">
 
             <div
                 class="fan"
@@ -695,7 +846,9 @@ main{
         <div
             class="mining-state"
             id="miningState">
+
             Máy đào đang tắt
+
         </div>
 
 
@@ -785,7 +938,7 @@ main{
 </section>
 
 
-<!-- BẠN BÈ -->
+<!-- ================= BẠN BÈ ================= -->
 
 <section
     id="friends"
@@ -831,14 +984,18 @@ main{
         </div>
 
         <h3>
-            Mời bạn bè
+            Chia sẻ liên kết
         </h3>
 
         <p
-            style="color:var(--muted);font-size:13px;line-height:1.5">
+            style="
+            color:var(--muted);
+            font-size:13px;
+            line-height:1.5">
 
-            Chia sẻ liên kết giới thiệu của m để nhận
-            phần thưởng theo chương trình của app.
+            Mời bạn bè tham gia app
+            và nhận phần thưởng referral
+            theo chương trình.
 
         </p>
 
@@ -873,7 +1030,7 @@ main{
 </section>
 
 
-<!-- NHIỆM VỤ -->
+<!-- ================= NHIỆM VỤ ================= -->
 
 <section
     id="tasks"
@@ -883,7 +1040,6 @@ main{
         🎯 Nhiệm vụ
     </h2>
 
-
     <div
         id="taskList"
         style="margin-top:18px">
@@ -892,7 +1048,7 @@ main{
 </section>
 
 
-<!-- SHOP -->
+<!-- ================= CỬA HÀNG ================= -->
 
 <section
     id="shop"
@@ -903,29 +1059,6 @@ main{
     </h2>
 
 
-    <div class="shop-card">
-
-        <div
-            style="font-size:35px">
-            ⛏️
-        </div>
-
-        <h3>
-            Máy đào
-        </h3>
-
-        <p
-            style="color:var(--muted);font-size:13px;line-height:1.5">
-
-            Chọn máy đào trong ứng dụng.
-            Thanh toán TON thật chỉ hoạt động khi backend
-            và hệ thống thanh toán được triển khai.
-
-        </p>
-
-    </div>
-
-
     <div id="machines"></div>
 
 
@@ -933,17 +1066,19 @@ main{
         class="shop-card"
         style="margin-top:12px">
 
-        <div
-            style="font-size:35px">
+        <div style="font-size:35px">
             🔄
         </div>
 
         <h3>
-            Quy đổi
+            Quy đổi Vé TON
         </h3>
 
         <p
-            style="color:var(--muted);font-size:13px;line-height:1.5">
+            style="
+            color:var(--muted);
+            font-size:13px;
+            line-height:1.5">
 
             Tỷ lệ quy đổi dự kiến của app:
 
@@ -957,7 +1092,9 @@ main{
         </strong>
 
         <p
-            style="color:var(--muted);font-size:12px;line-height:1.5">
+            style="
+            color:var(--muted);
+            font-size:12px">
 
             Tối thiểu quy đổi: 1 TON.
 
@@ -976,8 +1113,8 @@ main{
 
             Đây là tỷ lệ do app thiết lập.
             Không phải giá trị TON được bảo đảm.
-            Thanh toán thực tế phụ thuộc vào backend
-            và điều kiện của hệ thống.
+            Thanh toán thực tế phụ thuộc vào
+            hệ thống và điều kiện triển khai.
 
         </div>
 
@@ -996,7 +1133,7 @@ main{
 </section>
 
 
-<!-- VÍ -->
+<!-- ================= VÍ ================= -->
 
 <section
     id="wallet"
@@ -1009,13 +1146,9 @@ main{
 
     <div class="wallet-card">
 
-        <small
-            style="color:var(--muted)">
-
+        <small style="color:var(--muted)">
             Vé TON đã đào
-
         </small>
-
 
         <div
             class="wallet-balance"
@@ -1024,7 +1157,6 @@ main{
             0
 
         </div>
-
 
         <div class="unit">
             VÉ TON
@@ -1120,9 +1252,7 @@ main{
                 Chưa có giao dịch
             </strong>
 
-            <span>
-                —
-            </span>
+            <span>—</span>
 
         </div>
 
@@ -1133,7 +1263,7 @@ main{
 </main>
 
 
-<!-- BOTTOM NAV -->
+<!-- ================= MENU ================= -->
 
 <nav class="bottom-nav">
 
@@ -1187,7 +1317,7 @@ main{
 </div>
 
 
-<!-- SETTINGS -->
+<!-- ================= SETTINGS ================= -->
 
 <div
     class="modal"
@@ -1275,9 +1405,14 @@ main{
 
 <script>
 
-const STORAGE_KEY = "ton_miner_app";
+/* ================= DATA ================= */
 
-let data = JSON.parse(
+const STORAGE_KEY =
+    "ton_miner_app_v2";
+
+
+let data =
+JSON.parse(
     localStorage.getItem(STORAGE_KEY)
 ) || {
 
@@ -1305,6 +1440,8 @@ let data = JSON.parse(
 
 };
 
+
+/* ================= MÁY ================= */
 
 const machines = [
 
@@ -1353,6 +1490,8 @@ const machines = [
 ];
 
 
+/* ================= SAVE ================= */
+
 function saveData(){
 
     localStorage.setItem(
@@ -1363,6 +1502,8 @@ function saveData(){
 }
 
 
+/* ================= FORMAT ================= */
+
 function formatNumber(number){
 
     return Math.floor(number)
@@ -1371,10 +1512,13 @@ function formatNumber(number){
 }
 
 
-function formatTime(milliseconds){
+function formatTime(ms){
 
     let seconds =
-        Math.floor(milliseconds / 1000);
+        Math.max(
+            0,
+            Math.floor(ms / 1000)
+        );
 
     let hours =
         Math.floor(seconds / 3600);
@@ -1392,34 +1536,41 @@ function formatTime(milliseconds){
         minutes,
         seconds
 
-    ]
-    .map(
-        x => String(x).padStart(2,"0")
-    )
-    .join(":");
+    ].map(
+        x =>
+        String(x).padStart(2,"0")
+    ).join(":");
 
 }
 
+
+/* ================= TOAST ================= */
 
 function showToast(message){
 
     const toast =
         document.getElementById("toast");
 
-    toast.textContent = message;
+    toast.textContent =
+        message;
 
     toast.classList.add("show");
 
-    clearTimeout(window.toastTimer);
+    clearTimeout(
+        window.toastTimer
+    );
 
     window.toastTimer =
         setTimeout(
-            () => toast.classList.remove("show"),
+            () =>
+            toast.classList.remove("show"),
             2200
         );
 
 }
 
+
+/* ================= RENDER ================= */
 
 function render(){
 
@@ -1430,28 +1581,33 @@ function render(){
     document.getElementById(
         "tickets"
     ).textContent =
-        formatNumber(data.tickets);
+        formatNumber(
+            data.tickets
+        );
 
 
     document.getElementById(
         "walletTickets"
     ).textContent =
-        formatNumber(data.tickets);
+        formatNumber(
+            data.tickets
+        );
 
 
     document.getElementById(
         "currentMachine"
     ).textContent =
         machine.name
-        .replace("🆓 ","")
-        .replace("💎 ","");
+            .replace("🆓 ","")
+            .replace("💎 ","");
 
 
     document.getElementById(
         "rateText"
     ).textContent =
-        formatNumber(machine.rate)
-        + " vé / 4 giờ";
+        formatNumber(
+            machine.rate
+        ) + " vé / 4 giờ";
 
 
     document.getElementById(
@@ -1463,8 +1619,9 @@ function render(){
     document.getElementById(
         "refIncome"
     ).textContent =
-        formatNumber(data.refIncome)
-        + " vé";
+        formatNumber(
+            data.refIncome
+        ) + " vé";
 
 
     document.getElementById(
@@ -1494,19 +1651,22 @@ function render(){
         || "Chưa có địa chỉ ví";
 
 
-    const fan =
-        document.getElementById("fan");
-
-
-    fan.parentElement.parentElement
-        .classList.toggle(
-            "mining",
-            data.mining
+    const miner =
+        document.getElementById(
+            "miner"
         );
 
 
+    miner.classList.toggle(
+        "mining",
+        data.mining
+    );
+
+
     const button =
-        document.getElementById("mineBtn");
+        document.getElementById(
+            "mineBtn"
+        );
 
 
     button.textContent =
@@ -1530,6 +1690,8 @@ function render(){
 
 }
 
+
+/* ================= MINING ================= */
 
 function toggleMining(){
 
@@ -1591,8 +1753,9 @@ function updateMining(){
 
 
     /*
-        Đây chỉ là mô phỏng điểm trong giao diện.
-        Backend thật cần xử lý số dư khi triển khai.
+        Demo giao diện.
+        Khi làm backend thật,
+        phần cộng số dư phải chuyển lên server.
     */
 
     data.tickets +=
@@ -1604,7 +1767,8 @@ function updateMining(){
 
     const progress =
         Math.min(
-            elapsed / fourHours,
+            elapsed /
+            fourHours,
             1
         );
 
@@ -1612,14 +1776,15 @@ function updateMining(){
     document.getElementById(
         "progress"
     ).style.width =
-        (progress * 100) + "%";
+        progress * 100 + "%";
 
 
     document.getElementById(
         "sessionTime"
     ).textContent =
         formatTime(
-            now - data.startTime
+            now -
+            data.startTime
         );
 
 
@@ -1635,13 +1800,17 @@ function updateMining(){
             "claimBtn"
         ).textContent =
             "🎁 CLAIM "
-            + formatNumber(machine.rate)
+            + formatNumber(
+                machine.rate
+            )
             + " VÉ";
 
 
         document.getElementById(
             "claimBtn"
-        ).classList.add("ready");
+        ).classList.add(
+            "ready"
+        );
 
     }else{
 
@@ -1649,7 +1818,8 @@ function updateMining(){
             "claimTimer"
         ).textContent =
             formatTime(
-                fourHours - elapsed
+                fourHours -
+                elapsed
             );
 
 
@@ -1661,7 +1831,9 @@ function updateMining(){
 
         document.getElementById(
             "claimBtn"
-        ).classList.remove("ready");
+        ).classList.remove(
+            "ready"
+        );
 
     }
 
@@ -1719,6 +1891,8 @@ function claimReward(){
 }
 
 
+/* ================= PAGE ================= */
+
 function showPage(
     page,
     button
@@ -1727,7 +1901,10 @@ function showPage(
     document
         .querySelectorAll(".page")
         .forEach(
-            x => x.classList.remove("active")
+            x =>
+            x.classList.remove(
+                "active"
+            )
         );
 
 
@@ -1737,13 +1914,20 @@ function showPage(
 
 
     document
-        .querySelectorAll(".bottom-nav button")
+        .querySelectorAll(
+            ".bottom-nav button"
+        )
         .forEach(
-            x => x.classList.remove("active")
+            x =>
+            x.classList.remove(
+                "active"
+            )
         );
 
 
-    button.classList.add("active");
+    button.classList.add(
+        "active"
+    );
 
 
     window.scrollTo(
@@ -1754,21 +1938,24 @@ function showPage(
 }
 
 
+/* ================= REFERRAL ================= */
+
 function copyReferral(){
 
     const link =
-        document.getElementById(
+        document
+        .getElementById(
             "refLink"
-        ).textContent;
+        )
+        .textContent;
 
 
     if(
         navigator.clipboard
     ){
 
-        navigator.clipboard.writeText(
-            link
-        );
+        navigator.clipboard
+            .writeText(link);
 
     }
 
@@ -1776,102 +1963,6 @@ function copyReferral(){
     showToast(
         "📋 Đã sao chép liên kết"
     );
-
-}
-
-
-function convertTickets(){
-
-    const minimum =
-        450000000;
-
-
-    if(
-        data.tickets <
-        minimum
-    ){
-
-        showToast(
-            "Chưa đủ mức quy đổi tối thiểu 1 TON"
-        );
-
-        return;
-
-    }
-
-
-    showToast(
-        "⚠️ Quy đổi thật chưa được kết nối"
-    );
-
-}
-
-
-function connectWallet(){
-
-    showToast(
-        "Kết nối ví TON sẽ được thêm khi tích hợp backend"
-    );
-
-}
-
-
-function selectMachine(index){
-
-    data.machine =
-        index;
-
-
-    saveData();
-
-    render();
-
-
-    showToast(
-        "Đã chọn "
-        + machines[index].name
-    );
-
-}
-
-
-function openSettings(){
-
-    document
-        .getElementById(
-            "settingsModal"
-        )
-        .classList.add("show");
-
-}
-
-
-function closeSettings(){
-
-    document
-        .getElementById(
-            "settingsModal"
-        )
-        .classList.remove("show");
-
-}
-
-
-function toggleSound(){
-
-    data.sound =
-        !data.sound;
-
-
-    document.getElementById(
-        "soundBtn"
-    ).textContent =
-        data.sound
-        ? "🔊 Đang bật"
-        : "🔇 Đang tắt";
-
-
-    saveData();
 
 }
 
@@ -1900,40 +1991,42 @@ function buildReferral(){
         rewards.map(
             item => `
 
-                <div class="task">
+            <div class="task">
 
-                    <div class="task-info">
+                <div class="task-info">
 
-                        <strong>
-                            ${item[0]} ref
-                        </strong>
+                    <strong>
+                        ${item[0]} ref
+                    </strong>
 
-                        <small>
-                            +${formatNumber(item[1])}
-                            Vé TON
-                        </small>
-
-                    </div>
-
-                    <button
-                        class="action-btn"
-                        onclick="
-                            showToast(
-                                'Cần ${item[0]} ref để nhận thưởng'
-                            )
-                        ">
-
-                        Nhận
-
-                    </button>
+                    <small>
+                        +${formatNumber(item[1])}
+                        Vé TON
+                    </small>
 
                 </div>
 
-            `
+                <button
+                    class="action-btn"
+                    onclick="
+                        showToast(
+                            'Cần ${item[0]} ref để nhận thưởng'
+                        )
+                    ">
+
+                    Nhận
+
+                </button>
+
+            </div>
+
+        `
         ).join("");
 
 }
 
+
+/* ================= TASKS ================= */
 
 function buildTasks(){
 
@@ -1964,39 +2057,41 @@ function buildTasks(){
         tasks.map(
             task => `
 
-                <div class="task">
+            <div class="task">
 
-                    <div class="task-info">
+                <div class="task-info">
 
-                        <strong>
-                            ${task[0]}
-                        </strong>
+                    <strong>
+                        ${task[0]}
+                    </strong>
 
-                        <small>
-                            ${task[1]}
-                        </small>
-
-                    </div>
-
-                    <button
-                        class="action-btn"
-                        onclick="
-                            showToast(
-                                'Nhiệm vụ demo'
-                            )
-                        ">
-
-                        Làm
-
-                    </button>
+                    <small>
+                        ${task[1]}
+                    </small>
 
                 </div>
 
-            `
+                <button
+                    class="action-btn"
+                    onclick="
+                        showToast(
+                            'Nhiệm vụ demo'
+                        )
+                    ">
+
+                    Làm
+
+                </button>
+
+            </div>
+
+        `
         ).join("");
 
 }
 
+
+/* ================= SHOP ================= */
 
 function buildShop(){
 
@@ -2006,6 +2101,8 @@ function buildShop(){
 
         machines.map(
             (machine,index) => `
+
+            <div class="shop-card">
 
                 <div class="machine">
 
@@ -2037,11 +2134,119 @@ function buildShop(){
 
                 </div>
 
-            `
+            </div>
+
+        `
         ).join("");
 
 }
 
+
+function selectMachine(index){
+
+    data.machine =
+        index;
+
+
+    saveData();
+
+    render();
+
+
+    showToast(
+        "Đã chọn "
+        + machines[index].name
+    );
+
+}
+
+
+/* ================= WALLET ================= */
+
+function connectWallet(){
+
+    showToast(
+        "Kết nối ví TON sẽ được tích hợp ở bước backend"
+    );
+
+}
+
+
+function convertTickets(){
+
+    const minimum =
+        450000000;
+
+
+    if(
+        data.tickets <
+        minimum
+    ){
+
+        showToast(
+            "Chưa đủ mức quy đổi tối thiểu 1 TON"
+        );
+
+        return;
+
+    }
+
+
+    showToast(
+        "⚠️ Hệ thống quy đổi thật chưa được kết nối"
+    );
+
+}
+
+
+/* ================= SETTINGS ================= */
+
+function openSettings(){
+
+    document
+        .getElementById(
+            "settingsModal"
+        )
+        .classList.add(
+            "show"
+        );
+
+}
+
+
+function closeSettings(){
+
+    document
+        .getElementById(
+            "settingsModal"
+        )
+        .classList.remove(
+            "show"
+        );
+
+}
+
+
+function toggleSound(){
+
+    data.sound =
+        !data.sound;
+
+
+    document.getElementById(
+        "soundBtn"
+    ).textContent =
+        data.sound
+        ? "🔊 Đang bật"
+        : "🔇 Đang tắt";
+
+
+    saveData();
+
+}
+
+
+/* ================= START ================= */
 
 buildReferral();
 
@@ -2060,3 +2265,4 @@ setInterval(
 
 </body>
 </html>
+```
