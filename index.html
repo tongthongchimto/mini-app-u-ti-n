@@ -1,2268 +1,1162 @@
-```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>TON Miner</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TETHERIX — TON Mining</title>
 
 <style>
 :root{
-    --bg:#040b11;
-    --card:#0a1821;
-    --card2:#0d222e;
-    --line:#173542;
-    --text:#f3fbff;
-    --muted:#88a1ae;
-    --blue:#20c5f4;
-    --blue2:#76e6ff;
-    --green:#32e4aa;
+  --bg:#05080d;
+  --panel:#0a111a;
+  --panel2:#0d1722;
+  --line:#172534;
+  --text:#eef8f7;
+  --muted:#708293;
+  --cyan:#35f0c2;
+  --cyan2:#16bfa0;
+  --blue:#5cc8ff;
+  --danger:#ff657d;
+  --gold:#f5c866;
+  --shadow:0 20px 70px rgba(0,0,0,.45);
 }
 
-*{
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
-}
+*{box-sizing:border-box;margin:0;padding:0}
 
-html,body{
-    margin:0;
-    min-height:100%;
-    background:
-        radial-gradient(
-            circle at 50% -15%,
-            #12465d 0,
-            #071821 38%,
-            #02070b 85%
-        );
-    color:var(--text);
-    font-family:Arial,Helvetica,sans-serif;
-}
+html{scroll-behavior:smooth}
 
 body{
-    overflow-x:hidden;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(25,213,178,.12),transparent 35%),
+    radial-gradient(circle at 100% 40%,rgba(55,151,255,.07),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;
+  overflow-x:hidden;
+}
+
+button,input{
+  font:inherit;
 }
 
 button{
-    font-family:inherit;
-    cursor:pointer;
+  cursor:pointer;
 }
 
 .app{
-    width:100%;
-    max-width:520px;
-    min-height:100vh;
-    margin:auto;
-    padding-bottom:90px;
+  width:min(100%,520px);
+  min-height:100vh;
+  margin:auto;
+  position:relative;
+  padding-bottom:100px;
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
 
 .header{
-    height:72px;
-    padding:12px 16px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-}
-
-.brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
+  height:76px;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  background:rgba(5,8,13,.78);
+  backdrop-filter:blur(18px);
+  position:sticky;
+  top:0;
+  z-index:20;
 }
 
 .logo{
-    width:44px;
-    height:44px;
-    border-radius:14px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:
-        linear-gradient(145deg,#3bd5ff,#087aa7);
-    border:1px solid #66e1ff;
-    box-shadow:
-        0 0 20px #20c9f044,
-        inset 0 0 13px #ffffff18;
+  display:flex;
+  align-items:center;
+  gap:11px;
 }
 
-.ton-logo{
-    width:30px;
-    height:30px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:white;
-    font-size:18px;
-    font-weight:900;
-    background:#061720;
-    border:2px solid #82eaff;
-    box-shadow:0 0 13px #32d5ff66;
+.logo-icon{
+  width:40px;
+  height:40px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  background:
+    linear-gradient(145deg,#43ffcf,#0aa98e);
+  color:#03100d;
+  font-size:21px;
+  font-weight:1000;
+  box-shadow:
+    0 0 25px rgba(53,240,194,.22),
+    inset 0 1px rgba(255,255,255,.4);
 }
 
-.brand-text b{
-    display:block;
-    font-size:17px;
+.logo-text{
+  font-size:15px;
+  font-weight:900;
+  letter-spacing:2px;
 }
 
-.brand-text small{
-    color:var(--muted);
-    font-size:11px;
+.logo-sub{
+  display:block;
+  color:#526778;
+  font-size:8px;
+  letter-spacing:1.4px;
+  margin-top:3px;
 }
 
-.settings-btn{
-    width:42px;
-    height:42px;
-    border:1px solid var(--line);
-    border-radius:14px;
-    background:#0b202b;
-    color:white;
-    font-size:19px;
+.profile{
+  width:40px;
+  height:40px;
+  border:1px solid #213343;
+  border-radius:50%;
+  background:#0c1620;
+  color:#b9cbd0;
+  font-weight:800;
 }
 
-/* PAGE */
+/* ================= MAIN ================= */
 
 main{
-    padding:8px 14px;
+  padding:18px;
 }
 
-.page{
-    display:none;
-    animation:pageIn .2s ease;
+.section-label{
+  color:#526b7a;
+  font-size:9px;
+  letter-spacing:2px;
+  font-weight:800;
+  margin-bottom:9px;
 }
 
-.page.active{
-    display:block;
+/* ================= BALANCE ================= */
+
+.balance-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(53,240,194,.14);
+  border-radius:25px;
+  padding:25px 20px 21px;
+  text-align:center;
+  background:
+    radial-gradient(circle at 50% 0,rgba(53,240,194,.13),transparent 42%),
+    linear-gradient(145deg,#0c1720,#081018);
+  box-shadow:var(--shadow);
 }
 
-@keyframes pageIn{
-    from{
-        opacity:0;
-        transform:translateY(8px);
-    }
-    to{
-        opacity:1;
-        transform:none;
-    }
+.balance-card:before{
+  content:"";
+  position:absolute;
+  width:180px;
+  height:180px;
+  left:50%;
+  top:-110px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:rgba(53,240,194,.08);
+  filter:blur(30px);
 }
 
-/* MAIN */
-
-.main-card{
-    position:relative;
-    overflow:hidden;
-    padding:22px 18px;
-    border:1px solid #1b4b61;
-    border-radius:26px;
-    background:
-        linear-gradient(145deg,#113649,#071923);
-    box-shadow:0 18px 50px #0007;
-}
-
-.main-card:after{
-    content:"";
-    position:absolute;
-    width:190px;
-    height:190px;
-    right:-90px;
-    top:-90px;
-    border-radius:50%;
-    background:#22bdf020;
-}
-
-.balance-label{
-    color:var(--muted);
-    font-size:12px;
-    text-transform:uppercase;
-    letter-spacing:.08em;
+.balance-title{
+  position:relative;
+  color:#6c8390;
+  font-size:9px;
+  letter-spacing:2px;
+  font-weight:800;
 }
 
 .balance{
-    margin-top:5px;
-    font-size:39px;
-    font-weight:900;
+  position:relative;
+  margin:7px 0;
+  font-size:38px;
+  font-weight:950;
+  letter-spacing:-1.8px;
 }
 
-.unit{
-    color:var(--blue2);
-    font-size:13px;
-    font-weight:bold;
+.balance span{
+  font-size:22px;
+  margin-left:4px;
+}
+
+.balance-ton{
+  color:#8799a4;
+  font-size:11px;
+}
+
+.balance-ton strong{
+  color:var(--cyan);
 }
 
 .rate{
-    margin-top:9px;
-    color:#b4d5e2;
-    font-size:12px;
+  display:inline-flex;
+  margin-top:14px;
+  padding:7px 11px;
+  border:1px solid rgba(53,240,194,.14);
+  background:rgba(53,240,194,.06);
+  color:#65ddc3;
+  border-radius:99px;
+  font-size:9px;
+  font-weight:800;
 }
 
-/* TURBINE */
-
-.miner{
-    width:206px;
-    height:206px;
-    margin:25px auto 15px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:
-        radial-gradient(
-            circle,
-            #153b4d 0,
-            #0b202d 57%,
-            #06121a 58%
-        );
-
-    border:1px solid #2b6178;
-
-    box-shadow:
-        0 0 0 11px #09202b,
-        0 0 0 13px #123847,
-        0 0 55px #12b8ef25;
-}
-
-.fan{
-    position:relative;
-    width:128px;
-    height:128px;
-    border-radius:50%;
-
-    animation:turbineSpin 1.4s linear infinite;
-    animation-play-state:paused;
-
-    background:
-        radial-gradient(
-            circle,
-            #07151d 0 31%,
-            #123544 32% 38%,
-            #07151d 39% 100%
-        );
-
-    border:4px solid #246277;
-
-    box-shadow:
-        0 0 0 7px #071923,
-        0 0 0 9px #183d4c,
-        0 0 30px #20c8f52c;
-}
-
-.mining .fan{
-    animation-play-state:running;
-}
-
-.blade{
-    position:absolute;
-    width:27px;
-    height:57px;
-
-    left:47px;
-    top:8px;
-
-    border-radius:
-        18px 18px 9px 9px;
-
-    background:
-        linear-gradient(
-            160deg,
-            #8cecff 0%,
-            #32c9f0 42%,
-            #087ca8 100%
-        );
-
-    transform-origin:
-        13.5px 56px;
-
-    box-shadow:
-        inset -3px -5px 7px #00587866,
-        0 0 7px #2ed5ff33;
-}
-
-.blade:nth-child(1){
-    transform:rotate(0deg);
-}
-
-.blade:nth-child(2){
-    transform:rotate(72deg);
-}
-
-.blade:nth-child(3){
-    transform:rotate(144deg);
-}
-
-.blade:nth-child(4){
-    transform:rotate(216deg);
-}
-
-.blade:nth-child(5){
-    transform:rotate(288deg);
-}
-
-.fan-center{
-    position:absolute;
-    width:48px;
-    height:48px;
-    left:36px;
-    top:36px;
-    z-index:10;
-
-    border-radius:50%;
-
-    background:
-        radial-gradient(
-            circle at 35% 28%,
-            #d8faff 0%,
-            #65dcfa 18%,
-            #159ac5 48%,
-            #06394d 100%
-        );
-
-    border:4px solid #9beeff;
-
-    box-shadow:
-        0 0 18px #35d6ff88,
-        inset 0 0 12px #003347;
-}
-
-.fan-center:after{
-    content:"";
-    position:absolute;
-
-    width:13px;
-    height:13px;
-
-    left:50%;
-    top:50%;
-
-    transform:translate(-50%,-50%);
-
-    border-radius:50%;
-
-    background:#e0fbff;
-
-    box-shadow:0 0 10px #9beeff;
-}
-
-@keyframes turbineSpin{
-    from{
-        transform:rotate(0deg);
-    }
-    to{
-        transform:rotate(360deg);
-    }
-}
-
-.mining-state{
-    text-align:center;
-    color:var(--muted);
-    font-size:13px;
-}
-
-/* BUTTON */
-
-.mine-btn{
-    width:100%;
-    margin-top:16px;
-    padding:16px;
-    border:0;
-    border-radius:17px;
-    color:white;
-    font-weight:900;
-    font-size:15px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #15b7f0,
-            #087caf
-        );
-
-    box-shadow:0 10px 28px #08a9e833;
-}
-
-.mine-btn.active{
-    background:
-        linear-gradient(
-            135deg,
-            #2ee5aa,
-            #119b7a
-        );
-}
-
-/* STATS */
+/* ================= STATS ================= */
 
 .stats{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-top:12px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin-top:12px;
 }
 
 .stat{
-    padding:15px;
-    border-radius:17px;
-    border:1px solid var(--line);
-    background:#0a1b25;
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:13px 9px;
+  background:rgba(10,17,26,.8);
 }
 
 .stat small{
-    display:block;
-    color:var(--muted);
-    font-size:11px;
+  display:block;
+  color:#506274;
+  font-size:8px;
+  margin-bottom:5px;
 }
 
 .stat strong{
-    display:block;
-    margin-top:6px;
-    font-size:14px;
+  font-size:13px;
 }
 
-/* COMMON */
+/* ================= MINER ================= */
 
-.section-title{
-    margin:22px 2px 10px;
-    font-size:16px;
+.miner-card{
+  margin-top:14px;
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:18px;
+  background:
+    linear-gradient(145deg,rgba(14,25,35,.96),rgba(7,13,20,.96));
 }
 
-.card{
-    padding:16px;
-    border:1px solid var(--line);
-    border-radius:18px;
-    background:
-        linear-gradient(145deg,#0d202b,#08151d);
+.miner-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
 }
 
-.row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
+.miner-title{
+  display:flex;
+  gap:11px;
+  align-items:center;
+}
+
+.miner-icon{
+  width:45px;
+  height:45px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:#0e2829;
+  border:1px solid rgba(53,240,194,.12);
+  font-size:21px;
+}
+
+.miner-title h2{
+  font-size:15px;
+}
+
+.miner-title p{
+  color:#647687;
+  font-size:9px;
+  margin-top:4px;
+}
+
+.live{
+  color:var(--cyan);
+  border:1px solid rgba(53,240,194,.2);
+  background:rgba(53,240,194,.06);
+  padding:6px 8px;
+  border-radius:99px;
+  font-size:7px;
+  font-weight:900;
+}
+
+.mining-row{
+  margin-top:18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.mining-rate{
+  color:#8496a2;
+  font-size:10px;
+}
+
+.mining-rate strong{
+  color:white;
+  font-size:14px;
+}
+
+.claim{
+  border:0;
+  border-radius:11px;
+  padding:11px 15px;
+  background:linear-gradient(135deg,#43f4c9,#18b99d);
+  color:#03100d;
+  font-size:10px;
+  font-weight:950;
+  box-shadow:0 8px 25px rgba(53,240,194,.15);
+}
+
+.claim:active{
+  transform:scale(.97);
+}
+
+.progress-wrap{
+  margin-top:17px;
+}
+
+.progress-info{
+  display:flex;
+  justify-content:space-between;
+  color:#536878;
+  font-size:8px;
+  margin-bottom:7px;
 }
 
 .progress{
-    width:100%;
-    height:8px;
-    margin:14px 0;
-    overflow:hidden;
-    border-radius:99px;
-    background:#061119;
+  height:6px;
+  background:#14202b;
+  border-radius:99px;
+  overflow:hidden;
 }
 
 .progress-bar{
-    width:0%;
-    height:100%;
-    background:
-        linear-gradient(
-            90deg,
-            var(--blue),
-            var(--blue2)
-        );
-    transition:.3s;
+  height:100%;
+  width:0%;
+  border-radius:99px;
+  background:linear-gradient(90deg,#16bfa0,#65f6d1);
+  box-shadow:0 0 15px rgba(53,240,194,.3);
+  transition:width .3s;
 }
 
-.claim-btn{
-    width:100%;
-    padding:13px;
-    border:0;
-    border-radius:13px;
-    background:#173342;
-    color:#91aab6;
-    font-weight:800;
+/* ================= QUICK ACTIONS ================= */
+
+.section-title{
+  margin:20px 0 10px;
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
 }
 
-.claim-btn.ready{
-    background:var(--green);
-    color:#05281d;
+.section-title h2{
+  font-size:14px;
 }
 
-/* TASK */
-
-.task{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    margin:9px 0;
-    padding:14px;
-    border:1px solid var(--line);
-    border-radius:16px;
-    background:#0a1b25;
+.section-title span{
+  color:#506274;
+  font-size:8px;
 }
 
-.task-info{
-    min-width:0;
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
 
-.task-info strong{
-    display:block;
-    font-size:14px;
+.action{
+  min-height:110px;
+  text-align:left;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:16px;
+  background:
+    linear-gradient(145deg,#0c151f,#091018);
+  color:white;
+  transition:.2s;
 }
 
-.task-info small{
-    display:block;
-    margin-top:4px;
-    color:var(--muted);
-    font-size:11px;
+.action:hover{
+  border-color:#244352;
+  transform:translateY(-2px);
 }
 
-.action-btn{
-    padding:10px 13px;
-    border:0;
-    border-radius:12px;
-    background:#123b50;
-    color:#68d9ff;
-    font-weight:800;
-    white-space:nowrap;
+.action-icon{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:#111f2b;
+  margin-bottom:12px;
+  font-size:17px;
 }
 
-/* REFERRAL */
+.action b{
+  display:block;
+  font-size:11px;
+}
 
-.ref-box{
-    margin-top:12px;
-    padding:20px 16px;
-    border:1px solid var(--line);
-    border-radius:19px;
-    background:#0b1c27;
+.action small{
+  display:block;
+  color:#617384;
+  font-size:8px;
+  margin-top:5px;
+  line-height:1.4;
+}
+
+/* ================= NOTICE ================= */
+
+.notice{
+  margin-top:13px;
+  border:1px solid rgba(245,200,102,.14);
+  border-radius:17px;
+  padding:14px;
+  background:rgba(39,29,10,.35);
+}
+
+.notice-head{
+  color:var(--gold);
+  font-size:10px;
+  font-weight:900;
+}
+
+.notice p{
+  color:#877c67;
+  font-size:8px;
+  line-height:1.55;
+  margin-top:6px;
+}
+
+/* ================= BOTTOM NAV ================= */
+
+.bottom-nav{
+  position:fixed;
+  z-index:30;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(520px,100%);
+  height:75px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  background:rgba(7,12,18,.88);
+  backdrop-filter:blur(20px);
+  border-top:1px solid #172534;
+  padding:8px 7px 10px;
+}
+
+.nav-btn{
+  border:0;
+  background:none;
+  color:#536677;
+  font-size:8px;
+}
+
+.nav-btn span{
+  display:block;
+  font-size:18px;
+  margin-bottom:5px;
+}
+
+.nav-btn.active{
+  color:var(--cyan);
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(8px);
+}
+
+.modal.hidden{
+  display:none;
+}
+
+.sheet{
+  width:min(520px,100%);
+  max-height:86vh;
+  overflow:auto;
+  border:1px solid #233646;
+  border-bottom:0;
+  border-radius:25px 25px 0 0;
+  background:#0a121b;
+  padding:22px;
+  box-shadow:0 -20px 70px rgba(0,0,0,.55);
+  animation:up .22s ease;
+}
+
+@keyframes up{
+  from{transform:translateY(40px);opacity:.5}
+  to{transform:translateY(0);opacity:1}
+}
+
+.close{
+  float:right;
+  width:32px;
+  height:32px;
+  border:1px solid #223343;
+  border-radius:50%;
+  background:#101b26;
+  color:#a6b6bf;
+  font-size:19px;
+}
+
+.sheet h2{
+  font-size:18px;
+  margin-bottom:6px;
+}
+
+.sheet .sub{
+  color:#687b89;
+  font-size:10px;
+  line-height:1.5;
+  margin-bottom:18px;
+}
+
+.input{
+  width:100%;
+  border:1px solid #233646;
+  border-radius:12px;
+  outline:0;
+  background:#071019;
+  color:white;
+  padding:13px;
+  margin:5px 0;
+}
+
+.modal-button{
+  width:100%;
+  margin-top:9px;
+  border:0;
+  border-radius:12px;
+  padding:13px;
+  background:linear-gradient(135deg,#43f4c9,#18b99d);
+  color:#03100d;
+  font-weight:950;
+  font-size:10px;
+}
+
+.info-box{
+  border:1px solid #1d2d3c;
+  border-radius:14px;
+  padding:13px;
+  background:#0c1721;
+  margin-top:12px;
+}
+
+.info-box small{
+  color:#617383;
+  font-size:9px;
+}
+
+.info-box strong{
+  display:block;
+  margin-top:4px;
+  font-size:12px;
 }
 
 .ref-link{
-    margin:13px 0;
-    padding:12px;
-    border-radius:12px;
-    background:#06121a;
-    color:#83cce5;
-    font-size:12px;
-    word-break:break-all;
+  word-break:break-all;
+  color:var(--cyan);
+  background:#07141a;
+  border:1px solid rgba(53,240,194,.12);
+  padding:12px;
+  border-radius:12px;
+  font-size:9px;
+  margin-top:12px;
 }
 
-/* SHOP */
+/* ================= DESKTOP ================= */
 
-.shop-card{
-    margin-bottom:12px;
-    padding:16px;
-    border:1px solid var(--line);
-    border-radius:19px;
-    background:
-        linear-gradient(145deg,#0d202b,#08151d);
-}
+@media(min-width:700px){
+  body{
+    padding:20px 0;
+  }
 
-.machine{
-    margin-top:10px;
-    padding:14px;
-    border:1px solid #183a49;
-    border-radius:15px;
-    background:#0a1922;
-}
+  .app{
+    border:1px solid #142231;
+    border-radius:28px;
+    overflow:hidden;
+    box-shadow:0 30px 100px rgba(0,0,0,.55);
+  }
 
-.machine-title{
-    font-weight:800;
-}
-
-.machine-reward{
-    margin-top:7px;
-    color:#68d9ff;
-    font-size:13px;
-    font-weight:bold;
-}
-
-.shop-btn{
-    width:100%;
-    padding:11px;
-    border:0;
-    border-radius:12px;
-    background:#123b50;
-    color:#68d9ff;
-    font-weight:800;
-}
-
-/* WALLET */
-
-.wallet-card{
-    padding:20px;
-    border:1px solid #1b485d;
-    border-radius:22px;
-    background:
-        linear-gradient(145deg,#12364a,#081923);
-}
-
-.wallet-balance{
-    margin:8px 0;
-    font-size:32px;
-    font-weight:900;
-}
-
-.wallet-item{
-    margin-top:10px;
-    padding:15px;
-    border:1px solid var(--line);
-    border-radius:16px;
-    background:#0a1b25;
-}
-
-.wallet-item small{
-    display:block;
-    color:var(--muted);
-}
-
-.wallet-item strong{
-    display:block;
-    margin-top:6px;
-}
-
-.wallet-address{
-    margin-top:10px;
-    padding:10px;
-    border-radius:10px;
-    background:#06121a;
-    color:#7fc4db;
-    font-size:11px;
-    word-break:break-all;
-}
-
-/* NAV */
-
-.bottom-nav{
+  .bottom-nav{
     position:fixed;
-    z-index:20;
-    left:50%;
-    bottom:0;
-    transform:translateX(-50%);
-    width:min(100%,520px);
-
-    padding:
-        8px 7px
-        calc(8px + env(safe-area-inset-bottom));
-
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:4px;
-
-    background:rgba(5,15,22,.95);
-    backdrop-filter:blur(18px);
-    border-top:1px solid var(--line);
-}
-
-.bottom-nav button{
-    padding:7px 2px;
-    border:0;
-    border-radius:12px;
-    background:transparent;
-    color:#65808e;
-    font-size:10px;
-    font-weight:700;
-}
-
-.bottom-nav span{
-    display:block;
-    margin-bottom:3px;
-    font-size:20px;
-}
-
-.bottom-nav button.active{
-    background:#0b2938;
-    color:#55d5ff;
-}
-
-/* SETTINGS */
-
-.modal{
-    position:fixed;
-    z-index:50;
-    inset:0;
-
-    display:none;
-    align-items:flex-end;
-
-    background:#0009;
-}
-
-.modal.show{
-    display:flex;
-}
-
-.settings{
-    width:min(100%,520px);
-    padding:20px;
-
-    border-radius:25px 25px 0 0;
-    border:1px solid var(--line);
-
-    background:#091720;
-}
-
-.setting{
-    padding:15px 0;
-    border-bottom:1px solid #15313e;
-}
-
-.setting label{
-    display:block;
-    margin-bottom:8px;
-    color:var(--muted);
-    font-size:12px;
-}
-
-.setting select,
-.setting input{
-    width:100%;
-}
-
-.setting select{
-    padding:11px;
-    border:1px solid var(--line);
-    border-radius:12px;
-    background:#06121a;
-    color:white;
-}
-
-.close-settings{
-    width:100%;
-    margin-top:16px;
-    padding:13px;
-    border:0;
-    border-radius:13px;
-    background:#123344;
-    color:white;
-}
-
-/* TOAST */
-
-.toast{
-    position:fixed;
-    z-index:100;
-
-    left:50%;
-    bottom:105px;
-
-    transform:translate(-50%,20px);
-
-    opacity:0;
-    pointer-events:none;
-
-    padding:11px 15px;
-
-    border:1px solid #24566d;
-    border-radius:13px;
-
-    background:#102a38;
-    color:white;
-
-    font-size:13px;
-
-    transition:.2s;
-}
-
-.toast.show{
-    opacity:1;
-    transform:translate(-50%,0);
+    bottom:20px;
+    border:1px solid #1b2b39;
+    border-radius:20px;
+    width:500px;
+  }
 }
 </style>
 </head>
-
 
 <body>
 
 <div class="app">
 
 <header class="header">
-
-    <div class="brand">
-
-        <div class="logo">
-            <div class="ton-logo">T</div>
-        </div>
-
-        <div class="brand-text">
-            <b>TON MINER</b>
-            <small>Mini App</small>
-        </div>
-
+  <div class="logo">
+    <div class="logo-icon">T</div>
+    <div>
+      <div class="logo-text">TETHERIX</div>
+      <span class="logo-sub">TON MINING NETWORK</span>
     </div>
+  </div>
 
-    <button
-        class="settings-btn"
-        onclick="openSettings()">
-        ⚙️
-    </button>
-
+  <button class="profile">DT</button>
 </header>
 
 
 <main>
 
-<!-- ================= ĐÀO ================= -->
+<!-- BALANCE -->
 
-<section
-    id="mine"
-    class="page active">
+<section class="balance-card">
 
-    <div
-        class="main-card">
+  <div class="balance-title">SỐ DƯ VÉ TON</div>
 
-        <div class="balance-label">
-            Vé TON hiện có
-        </div>
+  <div class="balance">
+    <span id="balance">1,250,000</span>
+    <span>🎟️</span>
+  </div>
 
-        <div
-            class="balance"
-            id="tickets">
-            0
-        </div>
+  <div class="balance-ton">
+    Theo tỷ lệ quy đổi của app:
+    <strong id="tonValue">0.002778 TON</strong>
+  </div>
 
-        <div class="unit">
-            VÉ TON
-        </div>
-
-        <div class="rate">
-            ⛏️ Máy thường:
-            <span id="rateText">
-                50.000 vé / 4 giờ
-            </span>
-        </div>
-
-
-        <div
-            class="miner"
-            id="miner">
-
-            <div
-                class="fan"
-                id="fan">
-
-                <div class="blade"></div>
-                <div class="blade"></div>
-                <div class="blade"></div>
-                <div class="blade"></div>
-                <div class="blade"></div>
-
-                <div class="fan-center"></div>
-
-            </div>
-
-        </div>
-
-
-        <div
-            class="mining-state"
-            id="miningState">
-
-            Máy đào đang tắt
-
-        </div>
-
-
-        <button
-            class="mine-btn"
-            id="mineBtn"
-            onclick="toggleMining()">
-
-            ▶ BẮT ĐẦU ĐÀO
-
-        </button>
-
-
-        <div class="stats">
-
-            <div class="stat">
-
-                <small>
-                    Thời gian phiên
-                </small>
-
-                <strong id="sessionTime">
-                    00:00:00
-                </strong>
-
-            </div>
-
-
-            <div class="stat">
-
-                <small>
-                    Máy hiện tại
-                </small>
-
-                <strong id="currentMachine">
-                    Máy thường
-                </strong>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <h3 class="section-title">
-        🎟️ Kích hoạt / Claim
-    </h3>
-
-
-    <div class="card">
-
-        <div class="row">
-
-            <strong>
-                Chu kỳ đào
-            </strong>
-
-            <strong id="claimTimer">
-                04:00:00
-            </strong>
-
-        </div>
-
-
-        <div class="progress">
-
-            <div
-                class="progress-bar"
-                id="progress">
-            </div>
-
-        </div>
-
-
-        <button
-            class="claim-btn"
-            id="claimBtn"
-            onclick="claimReward()">
-
-            🔒 Chưa đủ 4 tiếng
-
-        </button>
-
-    </div>
+  <div class="rate">
+    4.500.000 VÉ = 0,01 TON
+  </div>
 
 </section>
 
 
-<!-- ================= BẠN BÈ ================= -->
+<!-- STATS -->
 
-<section
-    id="friends"
-    class="page">
+<section class="stats">
 
-    <h2>👥 Bạn bè</h2>
+  <div class="stat">
+    <small>ĐANG ĐÀO</small>
+    <strong>10 vé/lượt</strong>
+  </div>
 
+  <div class="stat">
+    <small>REFERRAL</small>
+    <strong id="refCount">0</strong>
+  </div>
 
-    <div class="stats">
-
-        <div class="stat">
-
-            <small>
-                Người bạn đã giới thiệu
-            </small>
-
-            <strong id="refCount">
-                0
-            </strong>
-
-        </div>
-
-
-        <div class="stat">
-
-            <small>
-                Thu nhập giới thiệu
-            </small>
-
-            <strong id="refIncome">
-                0 vé
-            </strong>
-
-        </div>
-
-    </div>
-
-
-    <div class="ref-box">
-
-        <div style="font-size:38px">
-            🔗
-        </div>
-
-        <h3>
-            Chia sẻ liên kết
-        </h3>
-
-        <p
-            style="
-            color:var(--muted);
-            font-size:13px;
-            line-height:1.5">
-
-            Mời bạn bè tham gia app
-            và nhận phần thưởng referral
-            theo chương trình.
-
-        </p>
-
-
-        <div
-            class="ref-link"
-            id="refLink">
-
-            https://example.com/?ref=MINER
-
-        </div>
-
-
-        <button
-            class="action-btn"
-            onclick="copyReferral()">
-
-            📋 Sao chép liên kết
-
-        </button>
-
-    </div>
-
-
-    <h3 class="section-title">
-        🎁 Mốc thưởng
-    </h3>
-
-
-    <div id="refTasks"></div>
+  <div class="stat">
+    <small>TRẠNG THÁI</small>
+    <strong style="color:var(--cyan)">ONLINE</strong>
+  </div>
 
 </section>
 
 
-<!-- ================= NHIỆM VỤ ================= -->
+<!-- MINER -->
 
-<section
-    id="tasks"
-    class="page">
+<section class="miner-card">
 
-    <h2>
-        🎯 Nhiệm vụ
-    </h2>
+  <div class="miner-head">
 
-    <div
-        id="taskList"
-        style="margin-top:18px">
+    <div class="miner-title">
+
+      <div class="miner-icon">⛏️</div>
+
+      <div>
+        <h2>Máy đào miễn phí</h2>
+        <p>Thiết bị cơ bản của tài khoản</p>
+      </div>
+
     </div>
+
+    <div class="live">● LIVE</div>
+
+  </div>
+
+
+  <div class="mining-row">
+
+    <div class="mining-rate">
+      Tốc độ hiện tại
+      <br>
+      <strong>10 vé / chu kỳ</strong>
+    </div>
+
+    <button class="claim" id="claimBtn">
+      NHẬN VÉ
+    </button>
+
+  </div>
+
+
+  <div class="progress-wrap">
+
+    <div class="progress-info">
+      <span>TIẾN TRÌNH</span>
+      <span id="timer">00:30</span>
+    </div>
+
+    <div class="progress">
+      <div class="progress-bar" id="progress"></div>
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- ================= CỬA HÀNG ================= -->
+<!-- ACTIONS -->
 
-<section
-    id="shop"
-    class="page">
-
-    <h2>
-        🛒 Cửa hàng
-    </h2>
+<div class="section-title">
+  <h2>Trung tâm</h2>
+  <span>TETHERIX NETWORK</span>
+</div>
 
 
-    <div id="machines"></div>
+<section class="actions">
+
+  <button class="action" data-panel="deposit">
+
+    <div class="action-icon">💎</div>
+
+    <b>Nạp TON</b>
+
+    <small>
+      Nạp TON vào hệ thống và chờ backend xác minh.
+    </small>
+
+  </button>
 
 
-    <div
-        class="shop-card"
-        style="margin-top:12px">
+  <button class="action" data-panel="convert">
 
-        <div style="font-size:35px">
-            🔄
-        </div>
+    <div class="action-icon">⇄</div>
 
-        <h3>
-            Quy đổi Vé TON
-        </h3>
+    <b>Quy đổi</b>
 
-        <p
-            style="
-            color:var(--muted);
-            font-size:13px;
-            line-height:1.5">
+    <small>
+      Gửi yêu cầu quy đổi vé theo tỷ lệ của app.
+    </small>
 
-            Tỷ lệ quy đổi dự kiến của app:
-
-        </p>
-
-        <strong
-            style="color:#68d9ff">
-
-            4.500.000 Vé TON → 0,01 TON
-
-        </strong>
-
-        <p
-            style="
-            color:var(--muted);
-            font-size:12px">
-
-            Tối thiểu quy đổi: 1 TON.
-
-        </p>
+  </button>
 
 
-        <div
-            style="
-            margin-top:12px;
-            padding:12px;
-            border-radius:12px;
-            background:#241f0e;
-            color:#d9ca8d;
-            font-size:12px;
-            line-height:1.5">
+  <button class="action" data-panel="referral">
 
-            Đây là tỷ lệ do app thiết lập.
-            Không phải giá trị TON được bảo đảm.
-            Thanh toán thực tế phụ thuộc vào
-            hệ thống và điều kiện triển khai.
+    <div class="action-icon">👥</div>
 
-        </div>
+    <b>Referral</b>
+
+    <small>
+      Mời người dùng mới và nhận thưởng theo chính sách.
+    </small>
+
+  </button>
 
 
-        <button
-            class="shop-btn"
-            style="margin-top:12px"
-            onclick="convertTickets()">
+  <button class="action" data-panel="history">
 
-            🔄 Quy đổi
+    <div class="action-icon">◴</div>
 
-        </button>
+    <b>Lịch sử</b>
 
-    </div>
+    <small>
+      Theo dõi hoạt động tài khoản và yêu cầu.
+    </small>
+
+  </button>
 
 </section>
 
 
-<!-- ================= VÍ ================= -->
+<!-- NOTICE -->
 
-<section
-    id="wallet"
-    class="page">
+<section class="notice">
 
-    <h2>
-        👛 Ví
-    </h2>
+  <div class="notice-head">
+    ⚠ THÔNG TIN QUY ĐỔI
+  </div>
 
-
-    <div class="wallet-card">
-
-        <small style="color:var(--muted)">
-            Vé TON đã đào
-        </small>
-
-        <div
-            class="wallet-balance"
-            id="walletTickets">
-
-            0
-
-        </div>
-
-        <div class="unit">
-            VÉ TON
-        </div>
-
-    </div>
-
-
-    <div class="wallet-item">
-
-        <small>
-            ⏳ Đang chờ thanh toán
-        </small>
-
-        <strong id="pending">
-            0 TON
-        </strong>
-
-    </div>
-
-
-    <div class="wallet-item">
-
-        <small>
-            ✅ Đã thanh toán
-        </small>
-
-        <strong id="paid">
-            0 TON
-        </strong>
-
-    </div>
-
-
-    <div class="wallet-item">
-
-        <small>
-            🔗 Phương thức thanh toán
-        </small>
-
-        <strong id="walletStatus">
-            Chưa liên kết ví
-        </strong>
-
-
-        <div
-            class="wallet-address"
-            id="walletAddress">
-
-            Chưa có địa chỉ ví
-
-        </div>
-
-
-        <button
-            class="action-btn"
-            style="margin-top:12px"
-            onclick="connectWallet()">
-
-            🔗 Kết nối ví TON
-
-        </button>
-
-    </div>
-
-
-    <h3 class="section-title">
-        📅 Lần thanh toán tiếp theo
-    </h3>
-
-
-    <div class="wallet-item">
-
-        <strong id="nextPayment">
-
-            Chưa có yêu cầu quy đổi
-
-        </strong>
-
-    </div>
-
-
-    <h3 class="section-title">
-        📜 Lịch sử
-    </h3>
-
-
-    <div class="wallet-item">
-
-        <div class="row">
-
-            <strong>
-                Chưa có giao dịch
-            </strong>
-
-            <span>—</span>
-
-        </div>
-
-    </div>
+  <p>
+    4.500.000 vé = 0,01 TON là tỷ lệ quy đổi do TETHERIX đặt ra.
+    Khả năng thanh toán thực tế phụ thuộc vào chính sách,
+    số dư và trạng thái xử lý của ứng dụng.
+  </p>
 
 </section>
 
 </main>
 
 
-<!-- ================= MENU ================= -->
+<!-- BOTTOM NAV -->
 
 <nav class="bottom-nav">
 
-    <button
-        class="active"
-        onclick="showPage('mine',this)">
+  <button class="nav-btn active">
+    <span>⌂</span>
+    Trang chủ
+  </button>
 
-        <span>⛏️</span>
-        Đào
+  <button class="nav-btn" data-panel="referral">
+    <span>♧</span>
+    Referral
+  </button>
 
-    </button>
+  <button class="nav-btn" data-panel="deposit">
+    <span>◇</span>
+    Ví
+  </button>
 
-
-    <button
-        onclick="showPage('friends',this)">
-
-        <span>👥</span>
-        Bạn bè
-
-    </button>
-
-
-    <button
-        onclick="showPage('tasks',this)">
-
-        <span>🎯</span>
-        Nhiệm vụ
-
-    </button>
-
-
-    <button
-        onclick="showPage('shop',this)">
-
-        <span>🛒</span>
-        Cửa hàng
-
-    </button>
-
-
-    <button
-        onclick="showPage('wallet',this)">
-
-        <span>👛</span>
-        Ví
-
-    </button>
+  <button class="nav-btn" data-panel="history">
+    <span>◷</span>
+    Lịch sử
+  </button>
 
 </nav>
 
 </div>
 
 
-<!-- ================= SETTINGS ================= -->
+<!-- MODAL -->
 
-<div
-    class="modal"
-    id="settingsModal">
+<div class="modal hidden" id="modal">
 
-    <div class="settings">
+  <div class="sheet">
 
-        <h2>
-            ⚙️ Cài đặt
-        </h2>
+    <button class="close" id="closeModal">×</button>
 
+    <div id="modalContent"></div>
 
-        <div class="setting">
+  </div>
 
-            <label>
-                🌐 Ngôn ngữ
-            </label>
-
-            <select>
-
-                <option>
-                    🇻🇳 Tiếng Việt
-                </option>
-
-                <option>
-                    🇬🇧 English
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="setting">
-
-            <label>
-                🔊 Âm lượng
-            </label>
-
-            <input
-                type="range"
-                min="0"
-                max="100"
-                value="70">
-
-        </div>
-
-
-        <div class="setting">
-
-            <label>
-                🔔 Âm thanh
-            </label>
-
-            <button
-                class="action-btn"
-                id="soundBtn"
-                onclick="toggleSound()">
-
-                🔊 Đang bật
-
-            </button>
-
-        </div>
-
-
-        <button
-            class="close-settings"
-            onclick="closeSettings()">
-
-            Đóng
-
-        </button>
-
-    </div>
-
-</div>
-
-
-<div
-    class="toast"
-    id="toast">
 </div>
 
 
 <script>
 
-/* ================= DATA ================= */
+/* =========================
+   DEMO DATA
+========================= */
 
-const STORAGE_KEY =
-    "ton_miner_app_v2";
+let tickets = 1250000;
+let seconds = 30;
+let mining = false;
 
 
-let data =
-JSON.parse(
-    localStorage.getItem(STORAGE_KEY)
-) || {
+/* =========================
+   BALANCE
+========================= */
 
-    tickets:0,
+function renderBalance(){
 
-    refs:0,
+  document.getElementById("balance").textContent =
+    tickets.toLocaleString("en-US");
 
-    refIncome:0,
+  const ton =
+    (tickets / 4500000) * 0.01;
 
-    machine:0,
+  document.getElementById("tonValue").textContent =
+    ton.toFixed(6) + " TON";
+}
 
-    mining:false,
+renderBalance();
 
-    startTime:0,
 
-    cycleStart:0,
+/* =========================
+   MINING
+========================= */
 
-    pending:0,
+function updateMining(){
 
-    paid:0,
+  seconds--;
 
-    wallet:"",
+  if(seconds <= 0){
 
-    sound:true
+    seconds = 30;
+    mining = true;
+
+    tickets += 10;
+
+    renderBalance();
+
+    setTimeout(()=>{
+      mining = false;
+    },500);
+
+  }
+
+  document.getElementById("timer").textContent =
+    "00:" + String(seconds).padStart(2,"0");
+
+  const progress =
+    ((30 - seconds) / 30) * 100;
+
+  document.getElementById("progress").style.width =
+    progress + "%";
+
+}
+
+setInterval(updateMining,1000);
+
+
+/* =========================
+   CLAIM
+========================= */
+
+document.getElementById("claimBtn").onclick = function(){
+
+  if(seconds > 0){
+
+    this.textContent = "ĐANG ĐÀO...";
+
+    setTimeout(()=>{
+      this.textContent = "NHẬN VÉ";
+    },700);
+
+    return;
+  }
 
 };
 
 
-/* ================= MÁY ================= */
+/* =========================
+   MODALS
+========================= */
 
-const machines = [
+const modal =
+  document.getElementById("modal");
 
-    {
-        name:"🆓 Máy thường",
-        rate:50000,
-        price:"Miễn phí"
-    },
-
-    {
-        name:"💎 Máy 1 TON",
-        rate:60000,
-        price:"1 TON"
-    },
-
-    {
-        name:"💎 Máy 5 TON",
-        rate:70000,
-        price:"5 TON"
-    },
-
-    {
-        name:"💎 Máy 10 TON",
-        rate:80000,
-        price:"10 TON"
-    },
-
-    {
-        name:"💎 Máy 15 TON",
-        rate:90000,
-        price:"15 TON"
-    },
-
-    {
-        name:"💎 Máy 20 TON",
-        rate:100000,
-        price:"20 TON"
-    },
-
-    {
-        name:"💎 Máy 25 TON",
-        rate:110000,
-        price:"25 TON"
-    }
-
-];
+const content =
+  document.getElementById("modalContent");
 
 
-/* ================= SAVE ================= */
+function openPanel(type){
 
-function saveData(){
+  if(type === "deposit"){
 
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(data)
+    content.innerHTML = `
+
+      <h2>💎 Nạp TON</h2>
+
+      <p class="sub">
+        Gửi TON đến địa chỉ nạp của TETHERIX.
+        Sau đó gửi transaction hash để hệ thống
+        xác minh giao dịch.
+      </p>
+
+      <div class="info-box">
+        <small>ĐỊA CHỈ NẠP</small>
+        <strong>
+          Chưa cấu hình địa chỉ TON
+        </strong>
+      </div>
+
+      <input
+        class="input"
+        placeholder="Nhập transaction hash"
+      >
+
+      <button class="modal-button">
+        GỬI GIAO DỊCH
+      </button>
+
+      <div class="info-box">
+        <small>TRẠNG THÁI</small>
+        <strong>
+          Chờ backend xác minh
+        </strong>
+      </div>
+
+    `;
+
+  }
+
+
+  if(type === "convert"){
+
+    content.innerHTML = `
+
+      <h2>⇄ Quy đổi</h2>
+
+      <p class="sub">
+        Tỷ lệ hiện tại của ứng dụng:
+        <strong>4.500.000 vé = 0,01 TON</strong>
+      </p>
+
+      <div class="info-box">
+        <small>SỐ DƯ KHẢ DỤNG</small>
+        <strong>
+          ${tickets.toLocaleString()} vé
+        </strong>
+      </div>
+
+      <input
+        class="input"
+        type="number"
+        placeholder="Số vé muốn quy đổi"
+      >
+
+      <input
+        class="input"
+        placeholder="Địa chỉ TON nhận"
+      >
+
+      <button class="modal-button">
+        GỬI YÊU CẦU QUY ĐỔI
+      </button>
+
+      <div class="info-box">
+        <small>LƯU Ý</small>
+        <strong>
+          Yêu cầu sẽ được ghi nhận để xử lý.
+        </strong>
+      </div>
+
+    `;
+
+  }
+
+
+  if(type === "referral"){
+
+    content.innerHTML = `
+
+      <h2>♧ Referral Network</h2>
+
+      <p class="sub">
+        Mời người dùng tham gia TETHERIX
+        thông qua link referral của bạn.
+      </p>
+
+      <div class="info-box">
+
+        <small>REFERRAL CỦA BẠN</small>
+
+        <strong>
+          0 người đủ điều kiện
+        </strong>
+
+      </div>
+
+      <div class="ref-link">
+        https://t.me/TETHERIX_BOT/app?startapp=YOUR_CODE
+      </div>
+
+      <button class="modal-button">
+        SAO CHÉP LINK
+      </button>
+
+      <div class="info-box">
+
+        <small>ĐIỀU KIỆN</small>
+
+        <strong>
+          Người được giới thiệu phải nạp
+          tối thiểu 1 TON và giao dịch phải
+          được xác minh.
+        </strong>
+
+      </div>
+
+    `;
+
+  }
+
+
+  if(type === "history"){
+
+    content.innerHTML = `
+
+      <h2>◷ Lịch sử</h2>
+
+      <p class="sub">
+        Theo dõi hoạt động tài khoản.
+      </p>
+
+      <div class="info-box">
+        <small>ĐÀO VÉ</small>
+        <strong>
+          ${tickets.toLocaleString()} vé hiện tại
+        </strong>
+      </div>
+
+      <div class="info-box">
+        <small>NẠP TON</small>
+        <strong>
+          Chưa có giao dịch
+        </strong>
+      </div>
+
+      <div class="info-box">
+        <small>QUY ĐỔI</small>
+        <strong>
+          Chưa có yêu cầu
+        </strong>
+      </div>
+
+    `;
+
+  }
+
+
+  modal.classList.remove("hidden");
+
+}
+
+
+/* =========================
+   OPEN BUTTONS
+========================= */
+
+document
+.querySelectorAll("[data-panel]")
+.forEach(button=>{
+
+  button.addEventListener("click",()=>{
+
+    openPanel(
+      button.dataset.panel
     );
 
-}
+  });
 
+});
 
-/* ================= FORMAT ================= */
 
-function formatNumber(number){
+/* =========================
+   CLOSE
+========================= */
 
-    return Math.floor(number)
-        .toLocaleString("vi-VN");
+document
+.getElementById("closeModal")
+.onclick = ()=>{
 
-}
+  modal.classList.add("hidden");
 
+};
 
-function formatTime(ms){
 
-    let seconds =
-        Math.max(
-            0,
-            Math.floor(ms / 1000)
-        );
+modal.addEventListener("click",(event)=>{
 
-    let hours =
-        Math.floor(seconds / 3600);
+  if(event.target === modal){
 
-    seconds %= 3600;
+    modal.classList.add("hidden");
 
-    let minutes =
-        Math.floor(seconds / 60);
+  }
 
-    seconds %= 60;
-
-    return [
-
-        hours,
-        minutes,
-        seconds
-
-    ].map(
-        x =>
-        String(x).padStart(2,"0")
-    ).join(":");
-
-}
-
-
-/* ================= TOAST ================= */
-
-function showToast(message){
-
-    const toast =
-        document.getElementById("toast");
-
-    toast.textContent =
-        message;
-
-    toast.classList.add("show");
-
-    clearTimeout(
-        window.toastTimer
-    );
-
-    window.toastTimer =
-        setTimeout(
-            () =>
-            toast.classList.remove("show"),
-            2200
-        );
-
-}
-
-
-/* ================= RENDER ================= */
-
-function render(){
-
-    const machine =
-        machines[data.machine];
-
-
-    document.getElementById(
-        "tickets"
-    ).textContent =
-        formatNumber(
-            data.tickets
-        );
-
-
-    document.getElementById(
-        "walletTickets"
-    ).textContent =
-        formatNumber(
-            data.tickets
-        );
-
-
-    document.getElementById(
-        "currentMachine"
-    ).textContent =
-        machine.name
-            .replace("🆓 ","")
-            .replace("💎 ","");
-
-
-    document.getElementById(
-        "rateText"
-    ).textContent =
-        formatNumber(
-            machine.rate
-        ) + " vé / 4 giờ";
-
-
-    document.getElementById(
-        "refCount"
-    ).textContent =
-        data.refs;
-
-
-    document.getElementById(
-        "refIncome"
-    ).textContent =
-        formatNumber(
-            data.refIncome
-        ) + " vé";
-
-
-    document.getElementById(
-        "pending"
-    ).textContent =
-        data.pending + " TON";
-
-
-    document.getElementById(
-        "paid"
-    ).textContent =
-        data.paid + " TON";
-
-
-    document.getElementById(
-        "walletStatus"
-    ).textContent =
-        data.wallet
-        ? "Đã liên kết"
-        : "Chưa liên kết ví";
-
-
-    document.getElementById(
-        "walletAddress"
-    ).textContent =
-        data.wallet
-        || "Chưa có địa chỉ ví";
-
-
-    const miner =
-        document.getElementById(
-            "miner"
-        );
-
-
-    miner.classList.toggle(
-        "mining",
-        data.mining
-    );
-
-
-    const button =
-        document.getElementById(
-            "mineBtn"
-        );
-
-
-    button.textContent =
-        data.mining
-        ? "⏸ DỪNG ĐÀO"
-        : "▶ BẮT ĐẦU ĐÀO";
-
-
-    button.classList.toggle(
-        "active",
-        data.mining
-    );
-
-
-    document.getElementById(
-        "miningState"
-    ).textContent =
-        data.mining
-        ? "⚡ Máy đào đang hoạt động"
-        : "Máy đào đang tắt";
-
-}
-
-
-/* ================= MINING ================= */
-
-function toggleMining(){
-
-    data.mining =
-        !data.mining;
-
-
-    if(data.mining){
-
-        data.startTime =
-            Date.now();
-
-        data.cycleStart =
-            Date.now();
-
-        showToast(
-            "⚡ Máy đào đã bắt đầu"
-        );
-
-    }else{
-
-        showToast(
-            "⏸ Đã dừng máy đào"
-        );
-
-    }
-
-
-    saveData();
-
-    render();
-
-}
-
-
-function updateMining(){
-
-    if(!data.mining){
-
-        return;
-
-    }
-
-
-    const now =
-        Date.now();
-
-
-    const elapsed =
-        now - data.cycleStart;
-
-
-    const fourHours =
-        4 * 60 * 60 * 1000;
-
-
-    const machine =
-        machines[data.machine];
-
-
-    /*
-        Demo giao diện.
-        Khi làm backend thật,
-        phần cộng số dư phải chuyển lên server.
-    */
-
-    data.tickets +=
-        machine.rate /
-        4 /
-        60 /
-        60;
-
-
-    const progress =
-        Math.min(
-            elapsed /
-            fourHours,
-            1
-        );
-
-
-    document.getElementById(
-        "progress"
-    ).style.width =
-        progress * 100 + "%";
-
-
-    document.getElementById(
-        "sessionTime"
-    ).textContent =
-        formatTime(
-            now -
-            data.startTime
-        );
-
-
-    if(progress >= 1){
-
-        document.getElementById(
-            "claimTimer"
-        ).textContent =
-            "00:00:00";
-
-
-        document.getElementById(
-            "claimBtn"
-        ).textContent =
-            "🎁 CLAIM "
-            + formatNumber(
-                machine.rate
-            )
-            + " VÉ";
-
-
-        document.getElementById(
-            "claimBtn"
-        ).classList.add(
-            "ready"
-        );
-
-    }else{
-
-        document.getElementById(
-            "claimTimer"
-        ).textContent =
-            formatTime(
-                fourHours -
-                elapsed
-            );
-
-
-        document.getElementById(
-            "claimBtn"
-        ).textContent =
-            "🔒 Chưa đủ 4 tiếng";
-
-
-        document.getElementById(
-            "claimBtn"
-        ).classList.remove(
-            "ready"
-        );
-
-    }
-
-
-    saveData();
-
-    render();
-
-}
-
-
-function claimReward(){
-
-    if(!data.mining){
-
-        showToast(
-            "M chưa bật máy đào"
-        );
-
-        return;
-
-    }
-
-
-    const fourHours =
-        4 * 60 * 60 * 1000;
-
-
-    if(
-        Date.now() -
-        data.cycleStart <
-        fourHours
-    ){
-
-        showToast(
-            "Chưa đủ 4 tiếng"
-        );
-
-        return;
-
-    }
-
-
-    data.cycleStart =
-        Date.now();
-
-
-    saveData();
-
-
-    showToast(
-        "🎁 Claim thành công"
-    );
-
-}
-
-
-/* ================= PAGE ================= */
-
-function showPage(
-    page,
-    button
-){
-
-    document
-        .querySelectorAll(".page")
-        .forEach(
-            x =>
-            x.classList.remove(
-                "active"
-            )
-        );
-
-
-    document
-        .getElementById(page)
-        .classList.add("active");
-
-
-    document
-        .querySelectorAll(
-            ".bottom-nav button"
-        )
-        .forEach(
-            x =>
-            x.classList.remove(
-                "active"
-            )
-        );
-
-
-    button.classList.add(
-        "active"
-    );
-
-
-    window.scrollTo(
-        0,
-        0
-    );
-
-}
-
-
-/* ================= REFERRAL ================= */
-
-function copyReferral(){
-
-    const link =
-        document
-        .getElementById(
-            "refLink"
-        )
-        .textContent;
-
-
-    if(
-        navigator.clipboard
-    ){
-
-        navigator.clipboard
-            .writeText(link);
-
-    }
-
-
-    showToast(
-        "📋 Đã sao chép liên kết"
-    );
-
-}
-
-
-function buildReferral(){
-
-    const rewards = [
-
-        [5,50000],
-
-        [10,100000],
-
-        [20,250000],
-
-        [50,500000],
-
-        [100,1000000]
-
-    ];
-
-
-    document.getElementById(
-        "refTasks"
-    ).innerHTML =
-
-        rewards.map(
-            item => `
-
-            <div class="task">
-
-                <div class="task-info">
-
-                    <strong>
-                        ${item[0]} ref
-                    </strong>
-
-                    <small>
-                        +${formatNumber(item[1])}
-                        Vé TON
-                    </small>
-
-                </div>
-
-                <button
-                    class="action-btn"
-                    onclick="
-                        showToast(
-                            'Cần ${item[0]} ref để nhận thưởng'
-                        )
-                    ">
-
-                    Nhận
-
-                </button>
-
-            </div>
-
-        `
-        ).join("");
-
-}
-
-
-/* ================= TASKS ================= */
-
-function buildTasks(){
-
-    const tasks = [
-
-        [
-            "📺 Xem quảng cáo",
-            "1 quảng cáo hợp lệ = +10.000 Vé TON"
-        ],
-
-        [
-            "🎮 Hoàn thành nhiệm vụ",
-            "Nhận phần thưởng theo nhiệm vụ"
-        ],
-
-        [
-            "📅 Điểm danh",
-            "Đăng nhập mỗi ngày để nhận thưởng"
-        ]
-
-    ];
-
-
-    document.getElementById(
-        "taskList"
-    ).innerHTML =
-
-        tasks.map(
-            task => `
-
-            <div class="task">
-
-                <div class="task-info">
-
-                    <strong>
-                        ${task[0]}
-                    </strong>
-
-                    <small>
-                        ${task[1]}
-                    </small>
-
-                </div>
-
-                <button
-                    class="action-btn"
-                    onclick="
-                        showToast(
-                            'Nhiệm vụ demo'
-                        )
-                    ">
-
-                    Làm
-
-                </button>
-
-            </div>
-
-        `
-        ).join("");
-
-}
-
-
-/* ================= SHOP ================= */
-
-function buildShop(){
-
-    document.getElementById(
-        "machines"
-    ).innerHTML =
-
-        machines.map(
-            (machine,index) => `
-
-            <div class="shop-card">
-
-                <div class="machine">
-
-                    <div class="machine-title">
-                        ${machine.name}
-                    </div>
-
-                    <div class="machine-reward">
-
-                        ${formatNumber(machine.rate)}
-                        Vé TON / 4 giờ
-
-                    </div>
-
-                    <button
-                        class="shop-btn"
-                        style="margin-top:12px"
-                        onclick="
-                            selectMachine(${index})
-                        ">
-
-                        ${
-                            index === 0
-                            ? "Sử dụng miễn phí"
-                            : "Chọn máy"
-                        }
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        `
-        ).join("");
-
-}
-
-
-function selectMachine(index){
-
-    data.machine =
-        index;
-
-
-    saveData();
-
-    render();
-
-
-    showToast(
-        "Đã chọn "
-        + machines[index].name
-    );
-
-}
-
-
-/* ================= WALLET ================= */
-
-function connectWallet(){
-
-    showToast(
-        "Kết nối ví TON sẽ được tích hợp ở bước backend"
-    );
-
-}
-
-
-function convertTickets(){
-
-    const minimum =
-        450000000;
-
-
-    if(
-        data.tickets <
-        minimum
-    ){
-
-        showToast(
-            "Chưa đủ mức quy đổi tối thiểu 1 TON"
-        );
-
-        return;
-
-    }
-
-
-    showToast(
-        "⚠️ Hệ thống quy đổi thật chưa được kết nối"
-    );
-
-}
-
-
-/* ================= SETTINGS ================= */
-
-function openSettings(){
-
-    document
-        .getElementById(
-            "settingsModal"
-        )
-        .classList.add(
-            "show"
-        );
-
-}
-
-
-function closeSettings(){
-
-    document
-        .getElementById(
-            "settingsModal"
-        )
-        .classList.remove(
-            "show"
-        );
-
-}
-
-
-function toggleSound(){
-
-    data.sound =
-        !data.sound;
-
-
-    document.getElementById(
-        "soundBtn"
-    ).textContent =
-        data.sound
-        ? "🔊 Đang bật"
-        : "🔇 Đang tắt";
-
-
-    saveData();
-
-}
-
-
-/* ================= START ================= */
-
-buildReferral();
-
-buildTasks();
-
-buildShop();
-
-render();
-
-setInterval(
-    updateMining,
-    1000
-);
+});
 
 </script>
 
 </body>
 </html>
-```
