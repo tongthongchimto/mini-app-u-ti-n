@@ -1,759 +1,1644 @@
-```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#06080d">
-  <title>TETHERIX — TON Mining</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TON Mini App</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-    :root {
-      --bg: #06080d;
-      --panel: #0c1018;
-      --panel2: #101621;
-      --line: rgba(255,255,255,.08);
-      --text: #f4f7fb;
-      --muted: #7e899b;
-      --blue: #35a8ff;
-      --cyan: #48d9ff;
-      --green: #43e6a3;
-      --danger: #ff5c72;
-    }
+body{
+  background:#00050b;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+}
 
-    body {
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at 50% -10%, rgba(53,168,255,.14), transparent 34%),
-        radial-gradient(circle at 100% 40%, rgba(72,217,255,.05), transparent 30%),
-        var(--bg);
-      color: var(--text);
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  background:
+    radial-gradient(circle at 50% -20%,#10345b 0,transparent 38%),
+    #020913;
+  padding-bottom:80px;
+}
 
-    button {
-      font: inherit;
-    }
+/* HEADER */
 
-    .app {
-      width: 100%;
-      max-width: 480px;
-      min-height: 100vh;
-      margin: auto;
-      padding-bottom: 94px;
-      position: relative;
-    }
+.header{
+  height:62px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  background:#020811;
+  border-bottom:1px solid #132b43;
+}
 
-    /* HEADER */
-    .header {
-      padding: 22px 20px 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+.menu{
+  font-size:27px;
+}
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-    }
+.logo{
+  font-size:22px;
+  font-weight:800;
+}
 
-    .logo {
-      width: 39px;
-      height: 39px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(145deg, #1b9cff, #0872d3);
-      box-shadow: 0 0 28px rgba(53,168,255,.25);
-      font-weight: 900;
-      font-size: 18px;
-    }
+.logo span{
+  color:#24a9ff;
+}
 
-    .brand-name {
-      font-size: 17px;
-      font-weight: 800;
-      letter-spacing: 2px;
-    }
+.bell{
+  position:relative;
+  font-size:23px;
+}
 
-    .brand-sub {
-      color: var(--muted);
-      font-size: 10px;
-      margin-top: 2px;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-    }
+.badge{
+  position:absolute;
+  right:-5px;
+  top:-8px;
+  background:#f04444;
+  font-size:9px;
+  width:17px;
+  height:17px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 
-    .profile {
-      width: 39px;
-      height: 39px;
-      border-radius: 50%;
-      border: 1px solid var(--line);
-      background: #111722;
-      display: grid;
-      place-items: center;
-      color: #aeb8c8;
-      font-weight: 700;
-    }
+/* PAGE */
 
-    /* MAIN BALANCE */
-    .balance {
-      margin: 18px 16px 0;
-      padding: 27px 23px 23px;
-      border: 1px solid var(--line);
-      border-radius: 23px;
-      background:
-        linear-gradient(145deg, rgba(18,25,37,.96), rgba(9,13,20,.96));
-      position: relative;
-      overflow: hidden;
-    }
+.page{
+  padding:11px;
+}
 
-    .balance::after {
-      content: "";
-      position: absolute;
-      width: 180px;
-      height: 180px;
-      right: -80px;
-      top: -80px;
-      border-radius: 50%;
-      background: rgba(53,168,255,.12);
-      filter: blur(10px);
-    }
+.card{
+  background:linear-gradient(145deg,#07192c,#03101d);
+  border:1px solid #123b61;
+  border-radius:11px;
+  padding:13px;
+  margin-bottom:10px;
+  box-shadow:inset 0 0 18px #03172b;
+}
 
-    .eyebrow {
-      color: var(--muted);
-      text-transform: uppercase;
-      font-size: 10px;
-      letter-spacing: 1.8px;
-      font-weight: 700;
-    }
+.blue-card{
+  border-color:#0875cf;
+}
 
-    .balance-number {
-      margin-top: 10px;
-      font-size: 36px;
-      font-weight: 800;
-      letter-spacing: -1.5px;
-    }
+.yellow-card{
+  border-color:#8b650d;
+  background:linear-gradient(145deg,#211b0b,#0e0d08);
+}
 
-    .balance-unit {
-      color: #a7b2c4;
-      font-size: 13px;
-      margin-left: 4px;
-      font-weight: 600;
-    }
+/* PROFILE */
 
-    .balance-ton {
-      margin-top: 7px;
-      color: var(--cyan);
-      font-size: 12px;
-    }
+.profile{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
 
-    /* MINING */
-    .mining {
-      margin: 13px 16px;
-      padding: 20px;
-      border-radius: 22px;
-      border: 1px solid rgba(53,168,255,.17);
-      background:
-        linear-gradient(145deg, rgba(12,22,34,.96), rgba(8,13,20,.98));
-    }
+.avatar{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 30%,#aeb9ca 0 15%,#253044 16% 40%,#05090f 41%);
+  border:1px solid #596d89;
+}
 
-    .mining-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+.small{
+  color:#8fa4bb;
+  font-size:11px;
+}
 
-    .status {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      color: var(--green);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .8px;
-      text-transform: uppercase;
-    }
+.vip{
+  color:#70c9ff;
+  border:1px solid #1766a3;
+  border-radius:7px;
+  padding:3px 7px;
+  font-size:10px;
+}
 
-    .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 12px var(--green);
-    }
+/* BALANCE */
 
-    .speed {
-      color: #b5c0d0;
-      font-size: 11px;
-    }
+.balance{
+  min-height:173px;
+  position:relative;
+  overflow:hidden;
+}
 
-    .mine-center {
-      text-align: center;
-      padding: 27px 0 22px;
-    }
+.balance:after{
+  content:"◉";
+  position:absolute;
+  right:24px;
+  top:42px;
+  font-size:78px;
+  color:#168dff;
+  text-shadow:0 0 25px #168dff;
+  opacity:.8;
+}
 
-    .mine-ring {
-      width: 138px;
-      height: 138px;
-      margin: auto;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      position: relative;
-      background:
-        radial-gradient(circle, #0b121d 57%, transparent 58%),
-        conic-gradient(var(--blue) 0deg, var(--cyan) 225deg, rgba(255,255,255,.06) 225deg);
-      box-shadow:
-        0 0 35px rgba(53,168,255,.13),
-        inset 0 0 30px rgba(53,168,255,.05);
-    }
+.label{
+  color:#52bfff;
+  font-size:11px;
+  text-transform:uppercase;
+}
 
-    .mine-ring::before {
-      content: "";
-      position: absolute;
-      inset: 8px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,.05);
-    }
+.amount{
+  font-size:30px;
+  font-weight:800;
+  margin-top:9px;
+}
 
-    .mine-icon {
-      font-size: 28px;
-      margin-bottom: 5px;
-    }
+.sub{
+  color:#9aafc4;
+  font-size:12px;
+  margin-top:5px;
+}
 
-    .mine-label {
-      color: var(--muted);
-      font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-    }
+.buttons{
+  display:flex;
+  gap:8px;
+  margin-top:15px;
+}
 
-    .mine-value {
-      font-size: 18px;
-      font-weight: 800;
-      margin-top: 4px;
-    }
+.btn{
+  flex:1;
+  height:39px;
+  border:1px solid #214a70;
+  border-radius:7px;
+  background:#071a2e;
+  color:#fff;
+  font-weight:600;
+}
 
-    .mine-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
+.btn.primary{
+  background:linear-gradient(#1684f5,#0757bd);
+  border-color:#168dff;
+}
 
-    .stat {
-      padding: 13px;
-      border-radius: 13px;
-      background: rgba(255,255,255,.025);
-      border: 1px solid rgba(255,255,255,.05);
-    }
+/* QUICK MENU */
 
-    .stat-title {
-      color: var(--muted);
-      font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+.quick{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  padding:9px 3px;
+}
 
-    .stat-value {
-      margin-top: 5px;
-      font-size: 14px;
-      font-weight: 700;
-    }
+.quick button{
+  background:none;
+  border:0;
+  color:#aebfd0;
+  font-size:10px;
+}
 
-    /* ACTIONS */
-    .actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 11px;
-      margin: 14px 16px;
-    }
+.quick .ico{
+  display:block;
+  font-size:21px;
+  margin-bottom:6px;
+  color:#d5e9fa;
+}
 
-    .action {
-      border: 1px solid var(--line);
-      border-radius: 17px;
-      padding: 16px;
-      color: var(--text);
-      background: #0c1119;
-      text-align: left;
-      cursor: pointer;
-      transition: .2s;
-    }
+/* MINING */
 
-    .action:hover {
-      border-color: rgba(53,168,255,.35);
-      transform: translateY(-1px);
-    }
+.mining{
+  position:relative;
+  min-height:105px;
+}
 
-    .action-icon {
-      font-size: 18px;
-      margin-bottom: 11px;
-    }
+.mining h3{
+  color:#16e18b;
+  font-size:12px;
+  margin-bottom:13px;
+}
 
-    .action-title {
-      font-size: 13px;
-      font-weight: 750;
-    }
+.speed{
+  font-size:17px;
+  font-weight:bold;
+}
 
-    .action-sub {
-      color: var(--muted);
-      font-size: 10px;
-      margin-top: 4px;
-    }
+.machine-art{
+  position:absolute;
+  right:18px;
+  top:20px;
+  width:76px;
+  height:62px;
+  border-radius:8px;
+  background:
+    linear-gradient(145deg,#144d7c,#071525);
+  border:1px solid #2675ad;
+  box-shadow:0 0 20px #1268a855;
+}
 
-    /* REFERRAL */
-    .referral {
-      margin: 14px 16px;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      background: linear-gradient(145deg, #0d121b, #090d14);
-    }
+.machine-art:before{
+  content:"";
+  position:absolute;
+  width:32px;
+  height:32px;
+  left:20px;
+  top:14px;
+  border:2px solid #4fc5ff;
+  transform:rotate(45deg);
+}
 
-    .ref-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+/* STATS */
 
-    .ref-title {
-      font-size: 14px;
-      font-weight: 750;
-    }
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+}
 
-    .ref-count {
-      color: var(--cyan);
-      font-size: 12px;
-      font-weight: 700;
-    }
+.stat{
+  min-height:76px;
+  padding:11px 8px;
+  background:#061426;
+  border:1px solid #102f4d;
+}
 
-    .ref-text {
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.55;
-      margin-top: 7px;
-    }
+.stat strong{
+  display:block;
+  font-size:16px;
+  margin-top:8px;
+}
 
-    .ref-link {
-      margin-top: 13px;
-      padding: 11px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-radius: 11px;
-      background: #070a10;
-      border: 1px solid rgba(255,255,255,.06);
-      color: #8e9aad;
-      font-size: 10px;
-    }
+/* NEWS */
 
-    .copy {
-      border: 0;
-      background: transparent;
-      color: var(--cyan);
-      font-size: 10px;
-      font-weight: 700;
-      cursor: pointer;
-    }
+.news{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
 
-    /* BOTTOM NAV */
-    .nav {
-      position: fixed;
-      z-index: 20;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 24px);
-      max-width: 456px;
-      height: 67px;
-      padding: 7px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(10,14,21,.94);
-      backdrop-filter: blur(20px);
-      box-shadow: 0 15px 45px rgba(0,0,0,.4);
-    }
+/* INNER HEADER */
 
-    .nav-item {
-      border: 0;
-      border-radius: 15px;
-      background: transparent;
-      color: #657083;
-      cursor: pointer;
-      font-size: 9px;
-      font-weight: 650;
-    }
+.inner-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:3px 2px 13px;
+}
 
-    .nav-item.active {
-      color: #eaf6ff;
-      background: rgba(53,168,255,.10);
-    }
+.back{
+  font-size:28px;
+}
 
-    .nav-icon {
-      font-size: 17px;
-      display: block;
-      margin-bottom: 4px;
-    }
+.title{
+  font-size:16px;
+  font-weight:bold;
+}
 
-    /* MODAL */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      background: rgba(0,0,0,.68);
-      backdrop-filter: blur(8px);
-      display: none;
-      align-items: flex-end;
-      justify-content: center;
-    }
+/* DEPOSIT */
 
-    .overlay.show {
-      display: flex;
-    }
+.info{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
 
-    .modal {
-      width: 100%;
-      max-width: 480px;
-      padding: 24px 20px 30px;
-      background: #0c1119;
-      border-radius: 25px 25px 0 0;
-      border-top: 1px solid rgba(255,255,255,.08);
-      animation: up .25s ease;
-    }
+.info-icon{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:#158df0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+}
 
-    @keyframes up {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
+.warning{
+  line-height:1.5;
+}
 
-    .modal-title {
-      font-size: 19px;
-      font-weight: 800;
-    }
+.warning b{
+  color:#ffcf42;
+}
 
-    .modal-sub {
-      color: var(--muted);
-      font-size: 11px;
-      margin-top: 6px;
-      line-height: 1.5;
-    }
+.address-title{
+  color:#5dc4ff;
+  font-size:12px;
+  margin-bottom:8px;
+}
 
-    .modal-box {
-      margin-top: 18px;
-      padding: 17px;
-      border: 1px solid var(--line);
-      border-radius: 15px;
-      background: #080c12;
-    }
+.address{
+  word-break:break-all;
+  line-height:1.45;
+  font-size:16px;
+}
 
-    .modal-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 12px;
-      font-size: 12px;
-    }
+.qr{
+  width:150px;
+  height:150px;
+  margin:15px auto;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      #111 0 4px,
+      #fff 4px 8px
+    );
+  border:7px solid white;
+  border-radius:4px;
+  position:relative;
+}
 
-    .modal-row:last-child {
-      margin-bottom: 0;
-    }
+.qr:after{
+  content:"TON";
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  background:#1487dc;
+  border-radius:50%;
+  padding:10px 5px;
+  color:#fff;
+  font-size:10px;
+  font-weight:bold;
+}
 
-    .modal-row span:first-child {
-      color: var(--muted);
-    }
+/* NETWORK */
 
-    .modal-row span:last-child {
-      font-weight: 700;
-    }
+.network{
+  display:flex;
+  justify-content:space-between;
+}
 
-    .close {
-      width: 100%;
-      margin-top: 15px;
-      padding: 14px;
-      border: 0;
-      border-radius: 13px;
-      color: white;
-      background: #151c27;
-      cursor: pointer;
-      font-weight: 700;
-    }
+.green{
+  color:#16df91;
+}
 
-    /* RESPONSIVE */
-    @media (min-width: 700px) {
-      body {
-        display: flex;
-        justify-content: center;
-      }
+/* STEPS */
 
-      .app {
-        border-left: 1px solid rgba(255,255,255,.03);
-        border-right: 1px solid rgba(255,255,255,.03);
-      }
-    }
-  </style>
+.steps{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:5px;
+  text-align:center;
+}
+
+.step-icon{
+  width:34px;
+  height:34px;
+  border:1px solid #2671a8;
+  border-radius:50%;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#5fc6ff;
+}
+
+.step-text{
+  font-size:9px;
+  color:#9aafc3;
+  margin-top:7px;
+  line-height:1.35;
+}
+
+/* MACHINES */
+
+.machine-card{
+  min-height:140px;
+  position:relative;
+  overflow:hidden;
+}
+
+.machine-card .machine-art{
+  left:15px;
+  top:30px;
+  width:62px;
+  height:70px;
+}
+
+.machine-info{
+  margin-left:83px;
+}
+
+.machine-name{
+  color:#55c5ff;
+  font-weight:bold;
+}
+
+.machine-card.vip-card{
+  border-color:#633dc2;
+}
+
+.price-tag{
+  position:absolute;
+  right:12px;
+  top:12px;
+  border:1px solid #6845c8;
+  color:#c1a5ff;
+  border-radius:6px;
+  padding:5px 10px;
+}
+
+.buy{
+  position:absolute;
+  right:12px;
+  bottom:14px;
+  background:#0875df;
+  border:0;
+  border-radius:6px;
+  color:white;
+  padding:9px 14px;
+}
+
+/* WALLET */
+
+.wallet-total{
+  font-size:20px;
+  margin:7px 0;
+}
+
+.wallet-row{
+  display:flex;
+  justify-content:space-between;
+  padding:13px 0;
+  border-bottom:1px solid #14324d;
+}
+
+.wallet-row:last-child{
+  border-bottom:0;
+}
+
+/* CONVERT */
+
+.convert-rate{
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
+  line-height:1.5;
+}
+
+.input{
+  width:100%;
+  height:43px;
+  border-radius:7px;
+  border:1px solid #173d5e;
+  background:#020b16;
+  color:white;
+  padding:0 12px;
+  margin-top:10px;
+}
+
+.receive{
+  text-align:center;
+  padding:18px 0;
+}
+
+.receive strong{
+  color:#19e69a;
+  font-size:18px;
+}
+
+/* ACCOUNT */
+
+.account-head{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.account-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 2px;
+  border-bottom:1px solid #14324c;
+  color:#d6e1ec;
+}
+
+.account-item:last-child{
+  border-bottom:0;
+}
+
+.logout{
+  color:#ff4939;
+}
+
+/* BOTTOM */
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(430px,100%);
+  height:74px;
+  background:#020b15f5;
+  border-top:1px solid #16344e;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  z-index:100;
+}
+
+.bottom button{
+  border:0;
+  background:none;
+  color:#8095aa;
+  font-size:10px;
+}
+
+.bottom button.active{
+  color:#42baff;
+}
+
+.bottom span{
+  display:block;
+  font-size:21px;
+  margin-bottom:4px;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-  <header class="header">
-    <div class="brand">
-      <div class="logo">T</div>
-      <div>
-        <div class="brand-name">TETHERIX</div>
-        <div class="brand-sub">TON DIGITAL NETWORK</div>
+<!-- HEADER -->
+
+<header class="header">
+  <div class="menu">☰</div>
+
+  <div class="logo">
+    TETHERI<span>X</span>
+  </div>
+
+  <div class="bell">
+    ♧
+    <span class="badge">3</span>
+  </div>
+</header>
+
+
+<!-- ================= TRANG CHỦ ================= -->
+
+<section id="home" class="page active">
+
+  <div class="card profile">
+
+    <div class="avatar"></div>
+
+    <div>
+      <div class="small">Xin chào,</div>
+      <b>TETHERIXER</b>
+
+      <div class="small">
+        ID: 1029384756
+        <span class="vip">VIP 1</span>
       </div>
     </div>
-
-    <div class="profile">T</div>
-  </header>
-
-  <main>
-
-    <section class="balance">
-      <div class="eyebrow">Tổng số dư</div>
-
-      <div class="balance-number">
-        <span id="tickets">1,250</span>
-        <span class="balance-unit">VÉ TON</span>
-      </div>
-
-      <div class="balance-ton">
-        ≈ 0.000002 TON · theo tỷ lệ quy đổi của ứng dụng
-      </div>
-    </section>
-
-    <section class="mining">
-
-      <div class="mining-top">
-        <div class="status">
-          <span class="dot"></span>
-          Đang hoạt động
-        </div>
-
-        <div class="speed">
-          +<span id="speed">2.5</span> vé / phút
-        </div>
-      </div>
-
-      <div class="mine-center">
-        <div class="mine-ring">
-          <div>
-            <div class="mine-icon">T</div>
-            <div class="mine-label">Mining</div>
-            <div class="mine-value">ACTIVE</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mine-grid">
-
-        <div class="stat">
-          <div class="stat-title">Phiên hiện tại</div>
-          <div class="stat-value" id="session">00:00:00</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-title">Tốc độ đào</div>
-          <div class="stat-value">2.5 vé/phút</div>
-        </div>
-
-      </div>
-
-    </section>
-
-    <section class="actions">
-
-      <button class="action" onclick="openModal('exchange')">
-        <div class="action-icon">⇄</div>
-        <div class="action-title">Quy đổi</div>
-        <div class="action-sub">Đổi vé TON theo tỷ lệ app</div>
-      </button>
-
-      <button class="action" onclick="openModal('reward')">
-        <div class="action-icon">◈</div>
-        <div class="action-title">Nhiệm vụ</div>
-        <div class="action-sub">Tăng tốc độ nhận vé</div>
-      </button>
-
-    </section>
-
-    <section class="referral">
-
-      <div class="ref-head">
-        <div class="ref-title">Referral Network</div>
-        <div class="ref-count">0 người</div>
-      </div>
-
-      <div class="ref-text">
-        Mời người dùng mới tham gia TETHERIX.
-        Referral chỉ được tính khi người được giới thiệu
-        đáp ứng điều kiện nạp tối thiểu 1 TON theo chính sách của ứng dụng.
-      </div>
-
-      <div class="ref-link">
-        <span>t.me/tetherix_bot?start=...</span>
-        <button class="copy" onclick="copyReferral()">COPY</button>
-      </div>
-
-    </section>
-
-  </main>
-
-  <nav class="nav">
-
-    <button class="nav-item active" onclick="nav(this)">
-      <span class="nav-icon">⌂</span>
-      Trang chủ
-    </button>
-
-    <button class="nav-item" onclick="nav(this)">
-      <span class="nav-icon">◈</span>
-      Nhiệm vụ
-    </button>
-
-    <button class="nav-item" onclick="nav(this)">
-      <span class="nav-icon">⇄</span>
-      Quy đổi
-    </button>
-
-    <button class="nav-item" onclick="nav(this)">
-      <span class="nav-icon">◎</span>
-      Hồ sơ
-    </button>
-
-  </nav>
-
-</div>
-
-<!-- MODAL -->
-<div class="overlay" id="overlay" onclick="closeOutside(event)">
-
-  <div class="modal">
-
-    <div class="modal-title" id="modalTitle">Quy đổi</div>
-
-    <div class="modal-sub" id="modalSub">
-      Kiểm tra số vé TON và điều kiện quy đổi trước khi gửi yêu cầu.
-    </div>
-
-    <div class="modal-box">
-
-      <div class="modal-row">
-        <span>Số dư</span>
-        <span id="modalBalance">1,250 vé TON</span>
-      </div>
-
-      <div class="modal-row">
-        <span>Tỷ lệ ứng dụng</span>
-        <span>4,500,000 vé = 0.01 TON</span>
-      </div>
-
-      <div class="modal-row">
-        <span>Trạng thái</span>
-        <span>Chưa đủ điều kiện</span>
-      </div>
-
-    </div>
-
-    <button class="close" onclick="closeModal()">Đóng</button>
 
   </div>
 
+
+  <div class="card balance blue-card">
+
+    <div class="label">
+      TỔNG VÉ TON
+    </div>
+
+    <div class="amount">
+      2,450,875
+    </div>
+
+    <div class="sub">
+      ≈ 0,0054 TON
+    </div>
+
+    <div class="buttons">
+
+      <button class="btn primary">
+        ⚒ Claim ngay
+      </button>
+
+      <button class="btn">
+        ▣ Lịch sử đào
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="card quick">
+
+    <button onclick="showPage('deposit')">
+      <span class="ico">♧</span>
+      Nạp TON
+    </button>
+
+    <button onclick="showPage('machines')">
+      <span class="ico">▤</span>
+      Máy đào
+    </button>
+
+    <button onclick="showPage('convert')">
+      <span class="ico">⟳</span>
+      Quy đổi
+    </button>
+
+    <button onclick="showPage('referral')">
+      <span class="ico">♧</span>
+      Giới thiệu
+    </button>
+
+    <button onclick="showPage('wallet')">
+      <span class="ico">▣</span>
+      Ví của tôi
+    </button>
+
+  </div>
+
+
+  <div class="card mining">
+
+    <h3>
+      Máy đào của bạn đang hoạt động
+    </h3>
+
+    <div class="small">
+      Tổng tốc độ đào
+    </div>
+
+    <div class="speed">
+      ⚡ 35,000
+      <span class="small">vé / ngày</span>
+    </div>
+
+    <div class="machine-art"></div>
+
+  </div>
+
+
+  <div class="label" style="margin:15px 0 7px">
+    THỐNG KÊ NHANH
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <span class="small">
+        Vé TON đào được
+      </span>
+      <strong>
+        1,245,000
+      </strong>
+    </div>
+
+    <div class="stat">
+      <span class="small">
+        TON đã nạp
+      </span>
+      <strong>
+        2,00
+      </strong>
+    </div>
+
+    <div class="stat">
+      <span class="small">
+        TON đã quy đổi
+      </span>
+      <strong>
+        0,003
+      </strong>
+    </div>
+
+  </div>
+
+
+  <div class="label" style="margin:15px 0 7px">
+    TIN TỨC
+  </div>
+
+  <div class="card news">
+
+    <span>
+      🎉 Sự kiện: Thưởng giới thiệu lên đến 10%
+    </span>
+
+    <span class="small">
+      01/08/2025
+    </span>
+
+  </div>
+
+</section>
+
+
+
+<!-- ================= NẠP TON ================= -->
+
+<section id="deposit" class="page">
+
+  <div class="inner-header">
+
+    <span class="back" onclick="showPage('home')">
+      ‹
+    </span>
+
+    <span class="title">
+      NẠP TON
+    </span>
+
+    <span class="blue">?</span>
+
+  </div>
+
+
+  <div class="card blue-card info">
+
+    <div class="info-icon">
+      i
+    </div>
+
+    <div>
+
+      <b>
+        Nạp TON để mua máy đào,
+        tăng tốc độ và nhận vé TON.
+      </b>
+
+      <div class="small" style="margin-top:6px">
+        Số TON nạp sẽ được dùng để kích hoạt
+        máy đào và tham gia hệ thống.
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="card yellow-card warning">
+
+    ⚠️
+
+    <b>
+      Chỉ gửi Gram (GRAM) và token mạng TON
+      đến địa chỉ này.
+    </b>
+
+    <div class="small">
+      Nếu không bạn sẽ mất tiền.
+      Gram là tên mới của Toncoin.
+    </div>
+
+  </div>
+
+
+  <div class="label">
+    ĐỊA CHỈ NẠP TON
+  </div>
+
+
+  <div class="card">
+
+    <div class="address-title">
+      Địa chỉ ví TON (TON Mainnet)
+      <span class="green">●</span>
+    </div>
+
+    <div class="address">
+      UQAKEmwWOXzbBrDE2USu_bpAPGFtCesGx259SgnW0Vk5OTZq
+    </div>
+
+    <div class="qr"></div>
+
+    <div class="buttons">
+
+      <button
+        class="btn"
+        onclick="copyWallet()"
+      >
+        ▣ Sao chép địa chỉ
+      </button>
+
+      <button class="btn">
+        ♧ Chia sẻ
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="card network">
+
+    <span>
+      <span class="small">
+        Mạng lưới
+      </span>
+
+      <br>
+
+      <b class="green">
+        TON (TON Mainnet)
+      </b>
+    </span>
+
+    <b class="green">
+      ● TONCOIN
+    </b>
+
+  </div>
+
+
+  <div class="label">
+    HƯỚNG DẪN NẠP
+  </div>
+
+
+  <div class="card">
+
+    <div class="steps">
+
+      <div>
+        <div class="step-icon">↓</div>
+        <div class="step-text">
+          1<br>
+          Mở ví hoặc sàn hỗ trợ nạp TON
+        </div>
+      </div>
+
+      <div>
+        <div class="step-icon">⌗</div>
+        <div class="step-text">
+          2<br>
+          Quét hoặc dán địa chỉ
+        </div>
+      </div>
+
+      <div>
+        <div class="step-icon">➤</div>
+        <div class="step-text">
+          3<br>
+          Gửi TON (GRAM)
+        </div>
+      </div>
+
+      <div>
+        <div class="step-icon">✓</div>
+        <div class="step-text">
+          4<br>
+          Xác nhận giao dịch
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- ================= MÁY ĐÀO ================= -->
+
+<section id="machines" class="page">
+
+  <div class="inner-header">
+
+    <span
+      class="back"
+      onclick="showPage('home')"
+    >
+      ‹
+    </span>
+
+    <span class="title">
+      MÁY ĐÀO
+    </span>
+
+    <span class="blue">?</span>
+
+  </div>
+
+
+  <div class="card blue-card">
+
+    <div class="small">
+      Tổng tốc độ đào
+    </div>
+
+    <div class="speed" style="margin-top:7px">
+      ⚡ 35,000
+      <span class="small">
+        vé / ngày
+      </span>
+    </div>
+
+  </div>
+
+
+  <div class="card machine-card">
+
+    <div class="machine-art"></div>
+
+    <div class="machine-info">
+
+      <div class="machine-name">
+        MÁY ĐÀO CƠ BẢN
+      </div>
+
+      <div class="small" style="margin-top:15px">
+        Giá:
+        <b style="color:#fff">
+          Miễn phí
+        </b>
+      </div>
+
+      <div class="small" style="margin-top:7px">
+        Tốc độ:
+        <b style="color:#fff">
+          1,000 vé / ngày
+        </b>
+      </div>
+
+      <div class="small" style="margin-top:7px">
+        Thời hạn:
+        <b style="color:#fff">
+          Vĩnh viễn
+        </b>
+      </div>
+
+    </div>
+
+    <button class="buy">
+      Chi tiết
+    </button>
+
+  </div>
+
+
+  <div class="card machine-card vip-card">
+
+    <div class="machine-art"></div>
+
+    <span class="price-tag">
+      1 TON
+    </span>
+
+    <div class="machine-info">
+
+      <div class="machine-name" style="color:#bd9bff">
+        MÁY ĐÀO 1 TON
+      </div>
+
+      <div class="small" style="margin-top:15px">
+        Giá:
+        <b style="color:#fff">
+          1 TON
+        </b>
+      </div>
+
+      <div class="small" style="margin-top:7px">
+        Tốc độ:
+        <b style="color:#fff">
+          5,000 vé / ngày
+        </b>
+      </div>
+
+      <div class="small" style="margin-top:7px">
+        Thời hạn:
+        30 ngày
+      </div>
+
+    </div>
+
+    <button class="buy">
+      Mua ngay
+    </button>
+
+  </div>
+
+
+  <div class="card machine-card vip-card">
+
+    <div class="machine-art"></div>
+
+    <span class="price-tag">
+      5 TON
+    </span>
+
+    <div class="machine-info">
+
+      <div class="machine-name">
+        MÁY ĐÀO 5 TON
+      </div>
+
+      <div class="small" style="margin-top:15px">
+        Giá:
+        <b style="color:#fff">
+          5 TON
+        </b>
+      </div>
+
+      <div class="small" style="margin-top:7px">
+        Tốc độ:
+        <b style="color:#fff">
+          25,000 vé / ngày
+        </b>
+      </div>
+
+      <div class="small" style="margin-top:7px">
+        Thời hạn:
+        60 ngày
+      </div>
+
+    </div>
+
+    <button class="buy">
+      Mua ngay
+    </button>
+
+  </div>
+
+
+  <div class="card machine-card vip-card">
+
+    <div class="machine-art"></div>
+
+    <span class="price-tag">
+      10 TON
+    </span>
+
+    <div class="machine-info">
+
+      <div class="machine-name">
+        MÁY ĐÀO 10 TON
+      </div>
+
+      <div class="small" style="margin-top:15px">
+        Giá:
+        <b style="color:#fff">
+          10 TON
+        </b>
+      </div>
+
+      <div class="small" style="margin-top:7px">
+        Tốc độ:
+        <b style="color:#fff">
+          55,000 vé / ngày
+        </b>
+      </div>
+
+      <div class="small" style="margin-top:7px">
+        Thời hạn:
+        60 ngày
+      </div>
+
+    </div>
+
+    <button class="buy">
+      Mua ngay
+    </button>
+
+  </div>
+
+</section>
+
+
+
+<!-- ================= GIỚI THIỆU ================= -->
+
+<section id="referral" class="page">
+
+  <div class="inner-header">
+
+    <span
+      class="back"
+      onclick="showPage('home')"
+    >
+      ‹
+    </span>
+
+    <span class="title">
+      GIỚI THIỆU
+    </span>
+
+    <span class="blue">?</span>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="small">
+      Link giới thiệu của bạn
+    </div>
+
+    <input
+      class="input"
+      value="https://tetherix.app?ref=1029384756"
+      readonly
+    >
+
+    <button
+      class="btn primary"
+      style="margin-top:9px"
+    >
+      ▣ Sao chép
+    </button>
+
+  </div>
+
+
+  <div class="label">
+    TỔNG QUAN
+  </div>
+
+
+  <div class="stats">
+
+    <div class="stat">
+      <span class="small">
+        Số người giới thiệu
+      </span>
+      <strong>12</strong>
+    </div>
+
+    <div class="stat">
+      <span class="small">
+        Đã nạp ≥ 1 TON
+      </span>
+      <strong>8</strong>
+    </div>
+
+    <div class="stat">
+      <span class="small">
+        Tổng thưởng đã nhận
+      </span>
+      <strong class="green">
+        0,025 TON
+      </strong>
+    </div>
+
+  </div>
+
+
+  <div class="label" style="margin-top:15px">
+    MỐC THƯỞNG
+  </div>
+
+
+  <div class="card">
+
+    <div class="wallet-row">
+      ✓ 10 người nạp ≥ 1 TON
+      <span class="green">
+        Đã đạt
+      </span>
+    </div>
+
+    <div class="wallet-row">
+      ✓ 20 người nạp ≥ 1 TON
+      <span>
+        12/20
+      </span>
+    </div>
+
+    <div class="wallet-row">
+      ✓ 50 người nạp ≥ 1 TON
+      <span>
+        12/50
+      </span>
+    </div>
+
+    <div class="wallet-row">
+      ✓ 100 người nạp ≥ 1 TON
+      <span>
+        12/100
+      </span>
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- ================= VÍ ================= -->
+
+<section id="wallet" class="page">
+
+  <div class="inner-header">
+
+    <span
+      class="back"
+      onclick="showPage('home')"
+    >
+      ‹
+    </span>
+
+    <span class="title">
+      VÍ CỦA TÔI
+    </span>
+
+    <span class="blue">?</span>
+
+  </div>
+
+
+  <div class="card blue-card">
+
+    <div class="label">
+      TỔNG TÀI SẢN
+    </div>
+
+    <div class="wallet-total">
+      0,0089 TON
+    </div>
+
+    <div class="small">
+      ≈ 23.500 VNĐ
+    </div>
+
+
+    <div class="wallet-row">
+
+      <span>
+        ◉ Ví TON (Mainnet)
+      </span>
+
+      <b>
+        0,0039 TON
+      </b>
+
+    </div>
+
+
+    <div class="wallet-row">
+
+      <span>
+        🔷 Vé TON
+      </span>
+
+      <b>
+        2,450,875 vé
+      </b>
+
+    </div>
+
+
+    <div class="wallet-row">
+
+      <span>
+        🟡 Đang chờ xử lý
+      </span>
+
+      <b>
+        0,0020 TON
+      </b>
+
+    </div>
+
+
+    <button
+      class="btn primary"
+      style="margin-top:14px"
+      onclick="showPage('deposit')"
+    >
+      ⚒ Nạp TON
+    </button>
+
+
+    <button
+      class="btn"
+      style="margin-top:8px"
+    >
+      ▣ Lịch sử giao dịch
+    </button>
+
+  </div>
+
+</section>
+
+
+
+<!-- ================= QUY ĐỔI ================= -->
+
+<section id="convert" class="page">
+
+  <div class="inner-header">
+
+    <span
+      class="back"
+      onclick="showPage('home')"
+    >
+      ‹
+    </span>
+
+    <span class="title">
+      QUY ĐỔI
+    </span>
+
+    <span class="blue">?</span>
+
+  </div>
+
+
+  <div class="card blue-card">
+
+    <div class="label">
+      TỶ LỆ QUY ĐỔI
+    </div>
+
+    <div class="convert-rate">
+
+      4.500.000 vé TON
+      <br>
+      = 0,01 TON
+
+    </div>
+
+    <div
+      class="small"
+      style="margin-top:10px;line-height:1.5"
+    >
+      Tỷ lệ quy đổi của app.
+      Điều kiện và khả năng thanh toán thực tế
+      sẽ được thông báo rõ ràng.
+
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="label">
+      QUY ĐỔI
+    </div>
+
+    <div class="small">
+      Số vé TON của bạn
+    </div>
+
+    <input
+      class="input"
+      value="2,450,875"
+    >
+
+    <div class="small" style="margin-top:5px">
+      Tối thiểu: 4.500.000 vé
+    </div>
+
+
+    <div class="receive">
+
+      ↓
+
+      <div class="small">
+        Bạn sẽ nhận được
+      </div>
+
+      <strong>
+        ≈ 0,0054 TON
+      </strong>
+
+    </div>
+
+
+    <button class="btn primary">
+      Quy đổi ngay
+    </button>
+
+  </div>
+
+
+  <div class="label">
+    LỊCH SỬ QUY ĐỔI
+  </div>
+
+
+  <div class="card">
+
+    <div class="wallet-row">
+
+      <span>
+        01/08/2025 14:22
+        <br>
+        <span class="small">
+          4.500.000 vé → 0,01 TON
+        </span>
+      </span>
+
+      <span class="green">
+        Đã duyệt
+      </span>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- ================= TÀI KHOẢN ================= -->
+
+<section id="account" class="page">
+
+  <div class="inner-header">
+
+    <span
+      class="back"
+      onclick="showPage('home')"
+    >
+      ‹
+    </span>
+
+    <span class="title">
+      TÀI KHOẢN
+    </span>
+
+    <span class="blue">?</span>
+
+  </div>
+
+
+  <div class="card account-head">
+
+    <div class="avatar"></div>
+
+    <div>
+
+      <b>
+        TETHERIXER
+      </b>
+
+      <div class="small">
+        ID: 1029384756
+        <span class="vip">
+          VIP 1
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="account-item">
+      ♙ Thông tin cá nhân
+      <span>›</span>
+    </div>
+
+    <div class="account-item">
+      ♧ KYC (Xác minh danh tính)
+      <span class="green">
+        Đã xác minh
+      </span>
+    </div>
+
+    <div class="account-item">
+      ◉ Bảo mật
+      <span>›</span>
+    </div>
+
+    <div class="account-item">
+      ♧ Thông báo
+      <span>›</span>
+    </div>
+
+    <div class="account-item">
+      🌐 Ngôn ngữ
+      <span>
+        Tiếng Việt ›
+      </span>
+    </div>
+
+    <div class="account-item">
+      ? Trung tâm hỗ trợ
+      <span>›</span>
+    </div>
+
+    <div class="account-item">
+      ▤ Điều khoản sử dụng
+      <span>›</span>
+    </div>
+
+  </div>
+
+
+  <div class="card logout">
+    ⇥ Đăng xuất
+  </div>
+
+</section>
+
+
+
+<!-- ================= BOTTOM NAV ================= -->
+
+<nav class="bottom">
+
+  <button
+    class="active"
+    onclick="showPage('home',this)"
+  >
+    <span>⌂</span>
+    Trang chủ
+  </button>
+
+  <button
+    onclick="showPage('machines',this)"
+  >
+    <span>▤</span>
+    Máy đào
+  </button>
+
+  <button
+    onclick="showPage('home',this)"
+  >
+    <span>⛏</span>
+  </button>
+
+  <button
+    onclick="showPage('convert',this)"
+  >
+    <span>⟳</span>
+    Quy đổi
+  </button>
+
+  <button
+    onclick="showPage('account',this)"
+  >
+    <span>♙</span>
+    Tài khoản
+  </button>
+
+</nav>
+
 </div>
+
 
 <script>
 
-  let tickets = 1250;
-  let seconds = 0;
+function showPage(id,button){
 
-  function formatNumber(number) {
-    return number.toLocaleString("en-US");
-  }
-
-  function updateTickets() {
-    document.getElementById("tickets").textContent = formatNumber(Math.floor(tickets));
-    document.getElementById("modalBalance").textContent =
-      formatNumber(Math.floor(tickets)) + " vé TON";
-  }
-
-  setInterval(() => {
-    tickets += 2.5 / 60;
-    seconds++;
-
-    updateTickets();
-
-    const h = String(Math.floor(seconds / 3600)).padStart(2, "0");
-    const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
-    const s = String(seconds % 60).padStart(2, "0");
-
-    document.getElementById("session").textContent =
-      `${h}:${m}:${s}`;
-
-  }, 1000);
-
-  function openModal(type) {
-
-    const title = document.getElementById("modalTitle");
-    const sub = document.getElementById("modalSub");
-
-    if (type === "exchange") {
-      title.textContent = "Quy đổi";
-      sub.textContent =
-        "Kiểm tra số vé TON và điều kiện quy đổi trước khi gửi yêu cầu.";
-    }
-
-    if (type === "reward") {
-      title.textContent = "Nhiệm vụ";
-      sub.textContent =
-        "Hoàn thành các nhiệm vụ hợp lệ để tăng tốc độ nhận vé.";
-    }
-
-    document.getElementById("overlay").classList.add("show");
-  }
-
-  function closeModal() {
-    document.getElementById("overlay").classList.remove("show");
-  }
-
-  function closeOutside(event) {
-    if (event.target.id === "overlay") {
-      closeModal();
-    }
-  }
-
-  function copyReferral() {
-    navigator.clipboard.writeText("https://t.me/tetherix_bot?start=USER_ID");
-
-    const button = document.querySelector(".copy");
-    const old = button.textContent;
-
-    button.textContent = "COPIED";
-
-    setTimeout(() => {
-      button.textContent = old;
-    }, 1500);
-  }
-
-  function nav(element) {
-    document.querySelectorAll(".nav-item").forEach(item => {
-      item.classList.remove("active");
+  document
+    .querySelectorAll(".page")
+    .forEach(page=>{
+      page.classList.remove("active");
     });
 
-    element.classList.add("active");
+  document
+    .getElementById(id)
+    .classList.add("active");
+
+
+  document
+    .querySelectorAll(".bottom button")
+    .forEach(btn=>{
+      btn.classList.remove("active");
+    });
+
+
+  if(button){
+    button.classList.add("active");
   }
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+function copyWallet(){
+
+  const wallet =
+  "UQAKEmwWOXzbBrDE2USu_bpAPGFtCesGx259SgnW0Vk5OTZq";
+
+  navigator.clipboard
+    .writeText(wallet)
+    .then(()=>{
+      alert("Đã sao chép địa chỉ TON");
+    });
+
+}
 
 </script>
 
 </body>
 </html>
-```
